@@ -1,0 +1,213 @@
+command /vanish <text>:
+    permission: vanish.mod
+    trigger:
+        remove player from {vanished::*}
+        remove player from {vanish1::*}
+        remove player from {vanish2::*}
+        remove player from {vanish3::*}
+        remove player from {vanish4::*}
+        wait 1 tick
+        if arg-1 is "1":
+            loop all players:
+                hide player from loop-players
+                if loop-player has permission "vanish.mod":
+                    reveal player to loop-player
+            wait 1 tick
+            add player to {vanish1::*}
+            add player to {vanished::*}
+            message "&bYou are visible to &5Moderator&b and up!"
+        if arg-1 is "2":
+            if player has permission "vanish.srmod":
+                loop all players:
+                    hide player from loop-players
+                    if loop-player has permission "vanish.srmod":
+                        reveal player to loop-player
+                message "&bYou are visible to &5Sr-Moderator&b and up!"
+                wait 1 tick
+                add player to {vanish2::*}
+                add player to {vanished::*}
+                wait 1 tick
+            else:
+                message "&cNo Perms!" to player
+        if arg-1 is "3":
+            if player has permission "vanish.admin":
+                loop all players:
+                    hide player from loop-players
+                    if loop-player has permission "vanish.admin":
+                        reveal player to loop-player
+                add player to {vanish3::*}
+                add player to {vanished::*}
+                message "&bYou are visible to &cAdmin&b and up!"
+                wait 1 tick
+            else:
+                message "&cNo Perms!" to player
+            wait 1 tick
+        if arg-1 is "4":
+            if player has permission "vanish.owner":
+                loop all players:
+                    hide player from loop-players
+                    if loop-player has permission "vanish.owner":
+                        reveal player to loop-player
+                message "&bYou are visible to &4Owner&b!"
+                wait 1 tick
+            else:
+                message "&cNo Perms!" to player
+            wait 1 tick
+            add player to {vanish4::*}
+            add player to {vanished::*}
+        if arg-1 is "off":
+            loop all players:
+                reveal player to loop-players
+            remove player from {vanish1::*}
+            remove player from {vanish2::*}
+            remove player from {vanish3::*}
+            remove player from {vanish4::*}
+            remove player from {vanished::*}
+            message "&bYou unvanished!"
+        if arg-1 is "0":
+            loop all players:
+                reveal player to loop-players
+            remove player from {vanish1::*}
+            remove player from {vanish2::*}
+            remove player from {vanish3::*}
+            remove player from {vanish4::*}
+            remove player from {vanished::*}
+            message "&bYou unvanished!"
+on join:
+    if {vanish1::*} contains player:
+        loop all players:
+            hide player from loop-players
+            if loop-player has permission "vanish.mod":
+                wait 1 tick
+                reveal player to loop-player
+        wait 3 ticks
+        message "&bYou are visible to &5Moderator&b and up!"
+    if {vanish2::*} contains player:
+        loop all players:
+            hide player from loop-players
+            wait 1 tick
+            if loop-player has permission "vanish.srmod":
+                hide player from loop-players
+        wait 3 ticks
+        message "&bYou are visible to &5Sr-Moderator&b and up!"
+
+    if {vanish3::*} contains player:
+        loop all players:
+            hide player from loop-players
+            if loop-player has permission "vanish.admin":
+                wait 1 tick
+                reveal player to loop-player
+        wait 3 ticks
+        message "&bYou are visible to &cAdmin&b and up!"
+        wait 1 tick
+    if {vanish4::*} contains player:
+        loop all players:
+            hide player from loop-players
+            if loop-player has permission "vanish.owner":
+                wait 1 tick
+                reveal player to loop-player
+        wait 3 ticks
+        message "&bYou are visible to &4Owner&b!"
+command /visibility:
+    permission: vanish.mod
+    trigger:
+        if {vanished::*} contains player:
+            if {vanish4::*} contains player:
+                message "&bYou are visible to &4Owner!" to player
+            if {vanish3::*} contains player:
+                message "&bYou are visible to &cAdmin&b and up!" to player
+            if {vanish2::*} contains player:
+                message "&bYou are visible to &5Sr-Moderator&b and up!" to player
+            if {vanish1::*} contains player:
+                message "&bYou are visible to &5Moderator&b and up!" to player
+        else:
+            message "&bYou are not vanished!"
+
+command /vanished:
+    permission: op
+    trigger:
+        send "&bAll players that are in vanish: &a%{vanished::*}%"
+
+on join:
+    loop {vanished::*}:
+        hide loop-value from player
+        wait 1 tick
+        if {vanish1::*} contains loop-value:
+            if player has permission "vanish.mod":
+                if loop-value is online:
+                    reveal loop-value to player
+        if {vanish2::*} contains loop-value:
+            if player has permission "vanish.srmod":
+                if loop-value is online:
+                    reveal loop-value to player
+        if {vanish3::*} contains loop-value:
+            if player has permission "vanish.admin":
+                if loop-value is online:
+                    reveal loop-value to player
+        if {vanish4::*} contains loop-value:
+            if player has permission "vanish.owner":
+                if loop-value is online:
+                    reveal loop-value to player
+command /unvanishother <offline player>:
+    permission message: "&cNo Perms!"
+    permission: vanish.mod
+    trigger:
+        if arg-1 is set:
+            if player has permission "vanish.admin":
+                if {vanished::*} contains arg-1:
+                    loop all players:
+                        reveal arg-1 to loop-players
+                        remove arg-1 from {vanished::*}
+                        remove arg-1 from {vanish1::*}
+                        remove arg-1 from {vanish2::*}
+                        remove arg-1 from {vanish3::*}
+                        remove arg-1 from {vanish4::*}
+                    message "&bYou unvanished %arg-1%!" to player
+                    message "&cYou were unvanished by %player%" to arg-1
+                else:
+                    message "&c%arg-1% isn't vanished!" to player
+command /unvanish:
+    permission: vanish.mod
+    permission message: "&cNo Perms!"
+    trigger:
+        if {vanished::*} contains player:
+            loop all players:
+                reveal player to loop-players
+                remove player from {vanished::*}
+                remove player from {vanish1::*}
+                remove player from {vanish2::*}
+                remove player from {vanish3::*}
+                remove player from {vanish4::*}
+            message "&bYou are now unvanished!" to player
+        else:
+            message "&cYou are not vanished!" to player
+on block break:
+    if {vanished::*} contains player:
+        if player does not have permission "vanish.interact":
+            message "&cYou cannot break blocks whilst vanished!" to player
+            cancel event
+on block place:
+    if {vanished::*} contains player:
+        if player does not have permission "vanish.interact":
+            message "&cYou cannot place blocks whilst vanished!" to player
+            cancel event
+on damage:
+    if {vanished::*} contains attacker:
+        if attacker does not have permission "vanish.interact":
+            message "&cYou cannot pvp whilst vanished!" to attacker
+            cancel event
+on join:
+    if {vanished::*} contains player:
+        set join message to ""
+on leave:
+    if {vanished::*} contains player:
+        set leave message to ""
+on tab complete of "/vanish":
+    if player has permission "vanish.mod":
+        add "0","1" and "Off" to tab completions for position 1
+    if player has permission "vanish.srmod":
+        add "0","1","2" and "Off" to tab completions for position 1
+    if player has permission "vanish.admin":
+        add "0","1","2","3" and "Off" to tab completions for position 1
+    if player has permission "vanish.owner":
+        add "0","1","2","3","4" and "Off" to tab completions for position 1
