@@ -1,4 +1,4 @@
-
+#Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 command punish <offlineplayer>:
     permission: staff.member
     trigger:
