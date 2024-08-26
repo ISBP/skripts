@@ -1,0 +1,397 @@
+
+command punish <offlineplayer>:
+    permission: staff.member
+    trigger:
+        set {punishedplayer.%player's uuid%} to arg-1's name
+        set {_pgui} to a new chest inventory with 3 rows named "&cPunish Player"
+        set slot 10 of {_pgui} to a anvil named "&c&lHacking"
+        set slot 12 of {_pgui} to a iron pickaxe named "&c&lXray"
+        set slot 14 of {_pgui} to a hopper named "&c&lBug Abusing"
+        set slot 16 of {_pgui} to a book and quill named "&c&lChat Abuse"
+        open {_pgui} to player
+on inventory click:
+    if name of event-inventory is "&cPunish Player":
+        if index of event-slot = 10: 
+            execute player command "punishhacker %{punishedplayer.%player's uuid%}%"
+        if index of event-slot = 12: 
+            execute player command "punishxrayer %{punishedplayer.%player's uuid%}%"
+        if index of event-slot = 14:
+            set {_bagui} to a new chest inventory with 3 rows named "&c&lBug Abusing"
+            set slot 11 of {_bagui} to a hopper named "&c&lDuping"
+            set slot 13 of {_bagui} to a redstone block named "&c&lBlock Glitching" with lore "&8And other glitches that give an advantage"
+            set slot 15 of {_bagui} to a book named "&c&lGeneral Bug Usage" with lore "&8Failing to report meaningful bugs."
+            open {_bagui} to player
+        if index of event-slot = 16:
+            set {_cagui} to a new chest inventory with 3 rows named "&c&lChat Abuse"
+            set slot 11 of {_cagui} to a book named "&c&lSpam"
+            set slot 13 of {_cagui} to a barrier named "&c&lRacism" with lore "&8And anything else discriminatory to a player"
+            set slot 15 of {_cagui} to a compass named "&c&lDoxxing/DDoSing Threats" with lore "&8This includes any threats to do anything that is a crime."
+            open {_cagui} to player
+    if name of event-inventory is "&c&lBug Abusing":
+        if index of event-slot = 11:
+            execute player command "lockaccount %{punishedplayer.%player's uuid%}%"
+        if index of event-slot = 13:
+            execute player command "punishBugAbuse %{punishedplayer.%player's uuid%}%"
+        if index of event-slot = 15:
+            execute player command "tempban %{punishedplayer.%player's uuid%}% 1h Failure to report bugs."
+    if name of event-inventory is "&c&lChat Abuse":
+        if index of event-slot = 11:
+            execute player command "spampunish %{punishedplayer.%player's uuid%}%"
+        if index of event-slot = 13:
+            execute player command "mute %{punishedplayer.%player's uuid%}% Racism/Discrimination"
+            execute player command "tempban -s %{punishedplayer.%player's uuid%}% Racism/Discrimination"
+        if index of event-slot = 15:
+            execute player command "lockaccount %{punishedplayer.%player's uuid%}%"
+            
+command punishbugabuse <offlineplayer>:
+    permission: ab.tempban
+    trigger:
+        add 1 to {punishments.%arg-1's uuid%}
+        set {_ap} to {punishments.%arg-1's uuid%}
+        set {punishments.%arg-1's uuid%.type.%{_ap}%} to "BugAbuse"
+        set {punishments.%arg-1's uuid%.Executor.%{_ap}%} to "%player%"
+        set {punishments.%arg-1's uuid%.date.%{_ap}%} to now
+        if {punishments.%arg-1's uuid%} is 1:
+            execute console command "tempban -s %arg-1% 1w Bug Abuse"
+            broadcast "&c%arg-1%&8 was banned for &cBug Abuse &8[&c&l7 DAYS&8]"
+        if {punishments.%arg-1's uuid%} is 2:
+            execute console command "tempban -s %arg-1% 1mo Bug Abuse"
+            broadcast "&c%arg-1%&8 was banned for &cBug Abuse &8[&c&l30 DAYS&8]"
+        if {punishments.%arg-1's uuid%} is greater than 2:
+            execute console command "tempban %arg-1% 3mo Bug Abuse"
+            broadcast "&c%arg-1%&8 was banned for &cBug Abuse &8[&c&l3 Months&8]"
+        send "&aSuccess" to player
+command lockaccount <offlineplayer>:
+    permission: staff.member
+    trigger:
+        if arg-1 does not have permission "staff.member":
+            add arg-1's uuid to {lockedaccounts::*}
+            send "&aSuccess!" to player
+            kick arg-1 due to "&cAccount Locked!"
+command unlockaccount <offlineplayer>:
+    permission: staff.member
+    trigger:
+        remove arg-1's uuid from {lockedaccounts::*}
+        send "&aSuccess" to player
+on connect:
+    if {lockedaccounts::*} contains player's uuid:
+        kick player due to "&8[&cLocked Account&8]%nl%&cPlease contact an &8[&cAdmin&8]&c to resolve this."
+command spampunish <offlineplayer>:
+    permission: ab.tempmute
+    trigger:
+        add 1 to {punishments.%arg-1's uuid%}
+        set {_ap} to {punishments.%arg-1's uuid%}
+        set {punishments.%arg-1's uuid%.type.%{_ap}%} to "Spam"
+        set {punishments.%arg-1's uuid%.Executor.%{_ap}%} to player
+        set {punishments.%arg-1's uuid%.date.%{_ap}%} to now
+        if {punishments.%arg-1's uuid%} is 1:
+            execute console command "tempmute -s %arg-1% 1h Spam"
+            broadcast "&c%arg-1%&8 was muted for &cSpam &8[&c&l1 HOUR&8]"
+        if {punishments.%arg-1's uuid%} is 2:
+            execute console command "tempmute -s %arg-1% 3d Spam"
+            broadcast "&c%arg-1%&8 was muted for &cSpam &8[&c&l3 DAYS&8]"
+        if {punishments.%arg-1's uuid%} is greater than 2:
+            execute console command "tempmute %arg-1% 1mo Spam"
+            broadcast "&c%arg-1%&8 was muted for &cSpam &8[&c&l1 MONTH&8]"
+        send "&aSuccess" to player
+
+on inventory click:
+    if name of event-inventory is "&cPunish Player":
+        cancel event
+    if name of event-inventory is "&c&lBug Abusing":
+        cancel event
+    if name of event-inventory is "&c&lChat Abuse":
+        cancel event
+command punishhacker <offlineplayer>:
+    permission: ab.tempban
+    trigger:
+        add 1 to {punishments.%arg-1's uuid%}
+        set {_ap} to {punishments.%arg-1's uuid%}
+        set {punishments.%arg-1's uuid%.type.%{_ap}%} to "Cheating"
+        set {punishments.%arg-1's uuid%.Executor.%{_ap}%} to "%player%"
+        set {punishments.%arg-1's uuid%.date.%{_ap}%} to now
+        if {punishments.%arg-1's uuid%} is 1:
+            execute console command "tempban -s %arg-1% 2mo Cheating"
+            broadcast "&c%arg-1%&8 was banned for &cCheating &8[&c&l60 DAYS&8]"
+        if {punishments.%arg-1's uuid%} is 2:
+            execute console command "tempban -s %arg-1% 6mo Cheating"
+            broadcast "&c%arg-1%&8 was banned for &cCheating &8[&c&l180 DAYS&8]"
+        if {punishments.%arg-1's uuid%} is greater than 2:
+            execute console command "ban -s %arg-1% Cheating"
+            broadcast "&c%arg-1%&8 was banned for &cCheating &8[&c&lPERM&8]"
+        send "&aSuccess" to player
+command punishxrayer <offlineplayer>:
+    permission: ab.tempban
+    trigger:
+        add 1 to {punishments.%arg-1's uuid%}
+        set {_ap} to {punishments.%arg-1's uuid%}
+        set {punishments.%arg-1's uuid%.type.%{_ap}%} to "Xray"
+        set {punishments.%arg-1's uuid%.Executor.%{_ap}%} to player
+        set {punishments.%arg-1's uuid%.date.%{_ap}%} to now
+        if {punishments.%arg-1's uuid%} is 1:
+            execute console command "tempban -s %arg-1% 1mo Xray"
+            broadcast "&c%arg-1%&8 was banned for &cXray &8[&c&l30 DAYS&8]"
+        if {punishments.%arg-1's uuid%} is 2:
+            execute console command "tempban -s %arg-1% 3mo Xray"
+            broadcast "&c%arg-1%&8 was banned for &cXray &8[&c&l90 DAYS&8]"
+        if {punishments.%arg-1's uuid%} is greater than 2:
+            execute console command "ban -s %arg-1% Xray"
+            broadcast "&c%arg-1%&8 was banned for &cXray &8[&c&lPERM&8]"
+        send "&aSuccess" to player
+command resetpunishments <offlineplayer>:
+    permission: staff.admin
+    trigger:
+        loop {punishments.%arg-1's uuid%} times:
+            add 1 to {_ap}
+            delete {punishments.%arg-1's uuid%.type.%{_ap}%}
+            delete {punishments.%arg-1's uuid%.Executor.%{_ap}%}
+            delete {punishments.%arg-1's uuid%.date.%{_ap}%}
+        delete {punishments.%arg-1's uuid%} 
+        send "&aSuccess!"
+
+
+command punishments <offline player>:
+    permission: staff.member
+    trigger:
+        add 1 to {_values}
+        set {_plist} to a new chest inventory with 5 rows named "&cPast Punishments"
+        loop {punishments.%arg-1's uuid%} times:
+            if {punishments.%arg-1's uuid%.type.%{_values}%} is "Cheating":
+                set slot {_values} of {_plist} to a red wool named "&c&lCheating-Ban" with lore "&8Date: &c%{punishments.%arg-1's uuid%.date.%{_values}%}%" and "&8Executor: &c%{punishments.%arg-1's uuid%.Executor.%{_values}%}%"
+            if {punishments.%arg-1's uuid%.type.%{_values}%} is "Xray":
+                set slot {_values} of {_plist} to a orange wool named "&c&lXray-Ban" with lore "&8Date: &c%{punishments.%arg-1's uuid%.date.%{_values}%}%" and "&8Executor: &c%{punishments.%arg-1's uuid%.Executor.%{_values}%}%"
+            if {punishments.%arg-1's uuid%.type.%{_values}%} is "BugAbuse":
+                set slot {_values} of {_plist} to a pink wool named "&c&lBug Abuse-Ban" with lore "&8Date: &c%{punishments.%arg-1's uuid%.date.%{_values}%}%" and "&8Executor: &c%{punishments.%arg-1's uuid%.Executor.%{_values}%}%"
+            if {punishments.%arg-1's uuid%.type.%{_values}%} is "Spam":
+                set slot {_values} of {_plist} to a yellow wool named "&c&lSpam-Mute" with lore "&8Date: &c%{punishments.%arg-1's uuid%.date.%{_values}%}%" and "&8Executor: &c%{punishments.%arg-1's uuid%.Executor.%{_values}%}%"
+            add 1 to {_values}
+        set slot 0 of {_plist} to arg-1's head named "&c&l%arg-1%'s Punishments" with lore "&8UUID:&c %arg-1's uuid%" and "&8First Join:&c %{sm::%arg-1's uuid%.joindate}%" and "&8Last Join:&c %{sm::%arg-1's uuid%.lastjoin}%"
+        open {_plist} to player
+
+on inventory click:
+    if name of event-inventory is "&cPast Punishments":
+        cancel event 
+on first join:
+    set {sm::%player's uuid%.joindate} to now
+on join:
+    set {sm::%player's uuid%.lastjoin} to now
+on left click with diamond axe:
+    if name of tool is "&c&lBan Hammer":
+        if player has permission "staff.member": #change this to staff mode future me :D
+            set {_tp} to target player
+            if {_tp} is not set:
+                wait 1 tick
+            else:
+                cancel event
+                send "&8You are punishing&c %target player%" to player
+                set {_tp} to target player 
+                wait 5 ticks
+                execute player command "punish %{_tp}%"
+on right click with diamond axe:
+    if name of tool is "&c&lBan Hammer":
+        if player has permission "staff.member": #change this to staff mode future me :D
+            set {_tp} to target player
+            if {_tp} is not set:
+                wait 1 tick
+            else:
+                cancel event
+                send "&8You are punishing&c %target player%" to player
+                set {_tp} to target player 
+                wait 5 ticks
+                execute player command "punish %{_tp}%"
+
+on damage:
+    if name of attacker's tool is "&c&lBan Hammer":
+        cancel event
+        send "&8You are punishing&c %victim%" to attacker
+        execute attacker command "punish %victim%"
+
+on left click with ice:
+    if name of tool is "&b&lFreeze Player":
+        if player has permission "staff.member": #change this to staff mode future me :D
+            set {_tp} to target player
+            if {_tp} is not set:
+                wait 1 tick
+            else:
+                cancel event
+                set {_tp} to target player 
+                wait 5 ticks
+                execute player command "vulcan freeze %{_tp}%"
+on right click with ice:
+    if {cooldown.%player's name%} is not set:
+        if name of tool is "&b&lFreeze Player":
+            if player has permission "staff.member": #change this to staff mode future me :D
+                set {_tp} to target player
+                if {_tp} is not set:
+                    wait 1 tick
+                else:
+                    if {cooldown.%player's name%} is not set:
+                        cancel event
+                        set {_tp} to target player 
+                        wait 5 ticks
+                        execute player command "vulcan freeze %{_tp}%"
+                        set {cooldown.%player's name%} to "true"
+                        wait 1 second
+                        delete {cooldown.%player's name%}
+
+on damage:
+    if name of attacker's tool is "&b&lFreeze Player":
+        cancel event
+        execute attacker command "vulcan freeze %victim%"
+on right click with light green dye:
+    if name of player's tool is "&a&lVanish":
+        if player has permission "staff.member":
+            reveal player to all players
+            set slot 8 of player's inventory to a gray dye named "&a&lVanish" with lore "&7Status: &cDisabled"
+            remove player's uuid from {vanished::*}
+            loop all players:
+                if loop-player has permission "staff.member":
+                    send "&3%player's name%&b unvanished!" to loop-player
+on right click with gray dye:
+    if name of player's tool is "&a&lVanish":
+        if player has permission "staff.member":
+            hide player from all players
+            set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
+            add player's uuid to {vanished::*}
+            loop all players:
+                if loop-player has permission "staff.member":
+                    send "&3%player's name%&b vanished!" to loop-player
+                    reveal player to loop-player
+on join:
+    if player doesn't have permission "staff.member":
+        loop all players:
+            if {vanished::*} contains loop-player's uuid:
+                hide loop-player from player
+    if {vanished::*} contains player's uuid:
+        set join message to ""
+        hide player from all players
+        loop all players:
+            if loop-player has permission "staff.member":
+                send "&3%player's name%&b joined silently!"
+                reveal player to loop-player
+    else:
+        set join message to "&8[&a+&8]&a %player's prefix%%player's name%&7 joined the game!"
+on leave:
+    if {vanished::*} contains player's uuid:
+        loop all players:
+            if loop-player has permission "staff.member":
+                send "&3%player's name%&b left silently!"
+        set leave message to ""
+    else:
+        set leave message to "&8[&c-&8] &c%player's prefix%%player's name%&7 left the game!"
+command staffmode:
+    permission: staff.member
+    trigger:
+        if {staffmode::*} doesn't contain player's uuid:
+            clear player's inventory
+            set slot 1 of player's inventory to a ice named "&b&lFreeze Player" with lore "&7Right Click on a player to freeze them"
+            set slot 0 of player's inventory to a diamond axe named "&c&lBan Hammer" with lore "&7Right click on a player to punish them!"
+            set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
+            add player's uuid to {staffmode::*}
+        else:
+            clear player's inventory
+            remove player's uuid from {staffmode::*}
+on join:
+    if {staffmode::*} contains player's uuid:
+        wait 2 ticks
+        send "&bYou are currently &3Vanished&b!"
+        clear player's inventory
+        set slot 1 of player's inventory to a ice named "&b&lFreeze Player" with lore "&7Left Click on a player to freeze them"
+        set slot 0 of player's inventory to a diamond axe named "&c&lBan Hammer" with lore "&7Left click on a player to punish them!"
+        set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
+on leave:
+    clear player's inventory
+on drop:
+    if {staffmode::*} contains player's uuid:
+        cancel event
+on inventory click:
+    if {staffmode::*} contains player's uuid:
+        cancel event
+on block place:
+    if {staffmode::*} contains player's uuid:
+        cancel event
+on block break:
+    if {staffmode::*} contains player's uuid:
+        cancel event
+on pickup:
+    if {staffmode::*} contains player's uuid:
+        cancel event
+command revtokenad:
+    permission: events.host
+    trigger:
+        send "&3Rev Tokens&r&b You can buy rev tokens on our store! /buy"
+command discord:
+    trigger:
+        send "&5&lDiscord: &r<url:https://discord.gg/ssVSxaX5BM>&dClick Here!"
+command alert <text>:
+    permission: event.host
+    trigger:
+        broadcast "&[&C&lAlert&r&8] &c%foramtted arg-1%"
+
+
+command rank <player> <text>
+    permission: server.admin
+    trigger:
+        execute player command "lp user %arg-1's name% parent add %arg-2%"
+        send "&3Successfully set &b%arg-1's name%'s&3 rank to %formatted arg-1's prefix%!" to player
+        send "&3Your rank has been set to %formatted arg-1's prefix%&b!" to arg-1
+command killstanders:
+    permission: event.host
+    trigger:
+        loop all players:
+            if block under loop-player is Cyan Concrete:
+                kill loop-player
+                send "&c&l❌ &8| &cʏᴏᴜ ᴅɪᴇᴅ!" to victim
+command setmaxhealth <number>:
+    permission: gay.set
+    trigger:
+        loop all players:
+            set loop-player's max health to arg-1
+
+on chat:
+    set {_message} to message
+    replace "A" with "a" in {_message}
+    replace "B" with "b" in {_message}
+    replace "C" with "c" in {_message}
+    replace "D" with "d" in {_message}
+    replace "E" with "e" in {_message}
+    replace "F" with "f" in {_message}
+    replace "G" with "g" in {_message}
+    replace "H" with "h" in {_message}
+    replace "I" with "i" in {_message}
+    replace "J" with "j" in {_message}
+    replace "K" with "k" in {_message}
+    replace "L" with "l" in {_message}
+    replace "M" with "m" in {_message}
+    replace "N" with "n" in {_message}
+    replace "O" with "o" in {_message}
+    replace "P" with "p" in {_message}
+    replace "Q" with "q" in {_message}
+    replace "R" with "r" in {_message}
+    replace "S" with "s" in {_message}
+    replace "T" with "t" in {_message}
+    replace "U" with "u" in {_message}
+    replace "V" with "v" in {_message}
+    replace "W" with "w" in {_message}
+    replace "X" with "x" in {_message}
+    replace "Y" with "y" in {_message}
+    replace "Z" with "z" in {_message}
+    loop {filter::*}:
+        if {_message} contains loop-value:
+            if player doesn't have permission "filter.bypass":
+                set {_blockedmessage} to loop-value
+                cancel event
+                send "&cThe word&6&l %{_blockedmessage}%&r&c was blocked in your message!" to player
+                send "&cThe word&6&l %{_blockedmessage}%&r&c was blocked in %player's name%'s message!" to console
+command filteradd <text>:
+    permission: network.admin
+    trigger:
+        if {filter::*} doesn't contain arg-1:
+            add arg-1 to {filter::*}
+            send "&bSuccessfully added &3%arg-1%&b to the filter!"
+        else
+            send "&cError &8| &cThe filter already contains &4%arg-1%&c!"
+on respawn:
+	apply infinite potion of night vision and saturation of tier 255 without any particles whilst hiding potion icon to the player
+on join:
+	apply infinite potion of night vision and saturation of tier 255 without any particles whilst hiding potion icon to the player
