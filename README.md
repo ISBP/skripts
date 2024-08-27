@@ -35,7 +35,7 @@ vanish.interact: Allows you to break blocks, place block and pvp while in vanish
 
 
 **Staff Tools:**
-/stafftools
+/staffmode
 /lockaccount <player>
 /unlockaccount <player>
 Documentation coming soon!
