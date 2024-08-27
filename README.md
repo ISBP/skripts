@@ -3,6 +3,7 @@ A collection of my public skripts :)
 
 
 **MultiVanish:**
+
 ![image](https://github.com/user-attachments/assets/fc7b910f-b24b-4cb7-ae1d-886fc9d8baaa)
 
 Commands:
