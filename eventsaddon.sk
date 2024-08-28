@@ -22,3 +22,39 @@ command setspawn: #I'll add setting x y z cords manually soon.
     trigger:
         set {spawn} to player's location
         send "&bSpawn &8| &bSet spawn to &3your location&b!"
+command gmc [<player>]:
+    permission: pbsi.gamemode
+    trigger:
+        if arg-1 is not set:
+            set player's gamemode to creative
+            send "&bGamemode &8| &bSet your gamemode to &3Creative"
+        else:
+            set arg-1's gamemode to creative
+            send "&bGamemode &8| &bSet &3%arg-1's name%'s&b gamemode to &3Creative" to player
+command gms [<player>]:
+    permission: pbsi.gamemode
+    trigger:
+        if arg-1 is not set:
+            set player's gamemode to survival
+            send "&bGamemode &8| &bSet your gamemode to &3Survival"
+        else:
+            set arg-1's gamemode to survival
+            send "&bGamemode &8| &bSet &3%arg-1's name%'s&b gamemode to &3Survival" to player
+command gmsp [<player>]:
+    permission: pbsi.gamemode
+    trigger:
+        if arg-1 is not set:
+            set player's gamemode to spectator
+            send "&bGamemode &8| &bSet your gamemode to &3Spectator"
+        else:
+            set arg-1's gamemode to spectator
+            send "&bGamemode &8| &bSet &3%arg-1's name%'s&b gamemode to &3Spectator" to player
+command gma [<player>]:
+    permission: pbsi.gamemode
+    trigger:
+        if arg-1 is not set:
+            set player's gamemode to adventure
+            send "&bGamemode &8| &bSet your gamemode to &3Adventure"
+        else:
+            set arg-1's gamemode to adventure
+            send "&bGamemode &8| &bSet &3%arg-1's name%'s&b gamemode to &3Adventure" to player
