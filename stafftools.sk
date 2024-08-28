@@ -316,19 +316,6 @@ on block break:
 on pickup:
     if {staffmode::*} contains player's uuid:
         cancel event
-command revtokenad:
-    permission: events.host
-    trigger:
-        send "&3Rev Tokens&r&b You can buy rev tokens on our store! /buy"
-command discord:
-    trigger:
-        send "&5&lDiscord: &r<url:https://discord.gg/ssVSxaX5BM>&dClick Here!"
-command alert <text>:
-    permission: event.host
-    trigger:
-        broadcast "&[&C&lAlert&r&8] &c%foramtted arg-1%"
-
-
 command rank <player> <text>:
     permission: server.admin
     trigger:
