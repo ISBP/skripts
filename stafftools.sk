@@ -329,7 +329,7 @@ command alert <text>:
         broadcast "&[&C&lAlert&r&8] &c%foramtted arg-1%"
 
 
-command rank <player> <text>
+command rank <player> <text>:
     permission: server.admin
     trigger:
         execute player command "lp user %arg-1's name% parent add %arg-2%"
@@ -376,5 +376,5 @@ command filteradd <text>:
         if {filter::*} doesn't contain arg-1:
             add arg-1 to {filter::*}
             send "&bSuccessfully added &3%arg-1%&b to the filter!"
-        else
+        else:
             send "&cError &8| &cThe filter already contains &4%arg-1%&c!"
