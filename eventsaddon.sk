@@ -1,0 +1,24 @@
+#|UNFINISHED| A collection of useful commands and other thingies in addition to a core :D
+command setmaxhealth <number>: #10 is 10 hearts, use decimals to indicate half hearts, I.E. 0.5 = half a heart.
+    permission: pbsi.health
+    trigger:
+        loop all players:
+            set loop-player's max health to arg-1
+        set {health} to arg-1
+        send "&cHealth &8| &cSet all players health to &4%arg-1%"
+
+on join:
+    set player's max health to {health}
+    teleport player to {spawn}
+on respawn:
+	apply infinite potion of night vision of tier 2 without any particles whilst hiding potion icon to the player
+    teleport player to {spawn}
+on join:
+	apply infinite potion of night vision of tier 2 without any particles whilst hiding potion icon to the player
+on food bar change:
+    cancel event
+command setspawn: #I'll add setting x y z cords manually soon.
+    permission: pbsi.setspawn
+    trigger:
+        set {spawn} to player's location
+        send "&bSpawn &8| &bSet spawn to &3your location&b!"

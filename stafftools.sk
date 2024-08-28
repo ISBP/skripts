@@ -378,7 +378,3 @@ command filteradd <text>:
             send "&bSuccessfully added &3%arg-1%&b to the filter!"
         else
             send "&cError &8| &cThe filter already contains &4%arg-1%&c!"
-on respawn:
-	apply infinite potion of night vision and saturation of tier 255 without any particles whilst hiding potion icon to the player
-on join:
-	apply infinite potion of night vision and saturation of tier 255 without any particles whilst hiding potion icon to the player
