@@ -1,7 +1,9 @@
 # skripts
 A collection of my public skripts :)
-
-
+# IMPORTANT:
+Some skripts DO require addons!
+Visit the Wiki tab to see how to use the skripts! [In Progress]
+My skripts are *currently* being tested on Skript version 2.9.1 on a Paper MC Server Running 1.20.4 with plugin Vault, Skuishy and SKLib! 
 **MultiVanish:**
 
 ![image](https://github.com/user-attachments/assets/fc7b910f-b24b-4cb7-ae1d-886fc9d8baaa)
