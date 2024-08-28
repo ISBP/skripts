@@ -1,8 +1,8 @@
 #In development for public use! |UNFINISHED| Requires Essentials, TAB and Skin Restorer
 command /disguise <text>:
-	permission: events.diamond
+	permission: pbsi.disguise
 	cooldown: 1 minuet
-	cooldown bypass: events.diamond
+	cooldown bypass: pbsi.disguise.nocooldown
 	trigger:
 		if arg-1 is "off":
 			wait 2 ticks
@@ -18,17 +18,17 @@ command /disguise <text>:
 				execute console command "tab player %player's name% customtabname %arg-1%"
 				execute console command "skin set %arg-1% %player's name%"
 				wait 1 tick
-				message "&bYou disguised yourself!"
+				message "&bDisguise &8| &bYou have disguised as &3%arg-1%&b!"
 				loop all players:
 					if loop-player has permission "events.staff":
-						message "&b[Disguise]: &a%player's name%&b has disguised as &a%arg-1%"
+						message "&bDisguise &8| &3%player's name%&b has disguised as &3%arg-1%" to loop-player
 		else:
 			if arg-1 is not "off":
 				execute console command "essentials:nick %player's name% %arg-1%"
 				execute console command "tab player %player's name% customtabname %arg-1%"
 				execute console command "skin set %arg-1% %player's name%"
 				wait 1 tick
-				message "&bYou disguised yourself!"
+				message "&bDisguise &8| &bYou have disguised as &3%arg-1%&b!"
 				loop all players:
 					if loop-player has permission "events.staff":
-						message "&b[Disguise]: &a%player's name%&b has disguised as &a%arg-1%" to loop-player
+						message "&bDisguise &8| &3%player's name%&b has disguised as &3%arg-1%" to loop-player
