@@ -58,3 +58,20 @@ command gma [<player>]:
         else:
             set arg-1's gamemode to adventure
             send "&bGamemode &8| &bSet &3%arg-1's name%'s&b gamemode to &3Adventure" to player
+
+command mutechat:
+    permission: pbsi.mutechat
+    trigger:
+        if {chat} is not "muted":
+            set {chat} to "muted"
+            send "&bChat &8| &bYou have &3muted&b chat!" to player
+            broadcast "&bChat &8| &bChat has been restricted to &3staff members&b!"
+        else:
+            broadcast "&bChat &8| &bChat has been &3unmuted&b!"
+            set {chat} to "unmuted"
+            send "&bChat &8| &bYou have &3unmuted&b chat!" to player
+on chat:
+    if {chat} is "muted":
+        if player doesn't have permission "pbsi.mutechat.bypass":
+            cancel event
+            send "&bChat &8| &bChat is currently &3Muted&b!"
