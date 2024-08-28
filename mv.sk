@@ -202,12 +202,3 @@ on join:
 on leave:
     if {vanished::*} contains player:
         set leave message to ""
-on tab complete of "/vanish":
-    if player has permission "vanish.mod":
-        add "0","1" and "Off" to tab completions for position 1
-    if player has permission "vanish.srmod":
-        add "0","1","2" and "Off" to tab completions for position 1
-    if player has permission "vanish.admin":
-        add "0","1","2","3" and "Off" to tab completions for position 1
-    if player has permission "vanish.owner":
-        add "0","1","2","3","4" and "Off" to tab completions for position 1
