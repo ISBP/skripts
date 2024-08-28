@@ -335,19 +335,6 @@ command rank <player> <text>
         execute player command "lp user %arg-1's name% parent add %arg-2%"
         send "&3Successfully set &b%arg-1's name%'s&3 rank to %formatted arg-1's prefix%!" to player
         send "&3Your rank has been set to %formatted arg-1's prefix%&b!" to arg-1
-command killstanders:
-    permission: event.host
-    trigger:
-        loop all players:
-            if block under loop-player is Cyan Concrete:
-                kill loop-player
-                send "&c&l❌ &8| &cʏᴏᴜ ᴅɪᴇᴅ!" to victim
-command setmaxhealth <number>:
-    permission: gay.set
-    trigger:
-        loop all players:
-            set loop-player's max health to arg-1
-
 on chat:
     set {_message} to message
     replace "A" with "a" in {_message}
