@@ -11,10 +11,10 @@ on join:
     set player's max health to {health}
     teleport player to {spawn}
 on respawn:
-	apply infinite potion of night vision of tier 2 without any particles whilst hiding potion icon to the player
+    apply infinite potion of night vision of tier 2 without any particles whilst hiding potion icon to the player
     teleport player to {spawn}
 on join:
-	apply infinite potion of night vision of tier 2 without any particles whilst hiding potion icon to the player
+    apply infinite potion of night vision of tier 2 without any particles whilst hiding potion icon to the player
 on food bar change:
     cancel event
 command setspawn: #I'll add setting x y z cords manually soon.
