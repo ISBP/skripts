@@ -269,16 +269,12 @@ on join:
             if loop-player has permission "staff.member":
                 send "&3%player's name%&b joined silently!"
                 reveal player to loop-player
-    else:
-        set join message to "&8[&a+&8]&a %player's prefix%%player's name%&7 joined the game!"
 on leave:
     if {vanished::*} contains player's uuid:
         loop all players:
             if loop-player has permission "staff.member":
                 send "&3%player's name%&b left silently!"
         set leave message to ""
-    else:
-        set leave message to "&8[&c-&8] &c%player's prefix%%player's name%&7 left the game!"
 command staffmode:
     permission: staff.member
     trigger:
@@ -288,17 +284,19 @@ command staffmode:
             set slot 0 of player's inventory to a diamond axe named "&c&lBan Hammer" with lore "&7Right click on a player to punish them!"
             set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
             add player's uuid to {staffmode::*}
+            execute player command "vanish"
         else:
             clear player's inventory
             remove player's uuid from {staffmode::*}
 on join:
     if {staffmode::*} contains player's uuid:
         wait 2 ticks
-        send "&bYou are currently &3Vanished&b!"
+        send "&bYou are currently &3in staffmode&b!"
         clear player's inventory
         set slot 1 of player's inventory to a ice named "&b&lFreeze Player" with lore "&7Left Click on a player to freeze them"
         set slot 0 of player's inventory to a diamond axe named "&c&lBan Hammer" with lore "&7Left click on a player to punish them!"
         set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
+        
 on leave:
     clear player's inventory
 on drop:
@@ -365,3 +363,17 @@ command filteradd <text>:
             send "&bSuccessfully added &3%arg-1%&b to the filter!"
         else:
             send "&cError &8| &cThe filter already contains &4%arg-1%&c!"
+
+command vanish:
+    permission: staff.member
+    trigger:
+        if {vanished::*} doesn't contain player's uuid:
+            loop all players:
+                if loop-player has permission "staff.member":
+                    send "&3%player's name%&b vanished!" to loop-player
+                    reveal player to loop-player
+        else:
+            loop all players:
+                if loop-player has permission "staff.member":
+                    send "&3%player's name%&b unvanished!" to loop-player
+            reveal player to all players
