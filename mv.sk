@@ -1,3 +1,4 @@
+#While this skript should work it's one of my older ones and thus needs revamping... Please report issues using the issues tab on github.
 command /vanish <text>:
     permission: vanish.mod
     trigger:
