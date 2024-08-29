@@ -1,4 +1,6 @@
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
+#IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
+#Version 0.6
 command punish <offlineplayer>:
     permission: staff.member
     trigger:
@@ -372,8 +374,10 @@ command vanish:
                 if loop-player has permission "staff.member":
                     send "&3%player's name%&b vanished!" to loop-player
                     reveal player to loop-player
+                    add player's uuid to {vanished::*}
         else:
             loop all players:
                 if loop-player has permission "staff.member":
                     send "&3%player's name%&b unvanished!" to loop-player
             reveal player to all players
+            remove player's uuid from {vanished::*}
