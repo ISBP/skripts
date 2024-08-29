@@ -4,7 +4,7 @@
 options:
     actionbar: true #set this to false to disable
     vanish: false #Change this to false if you are using a different vanish plugin and not our vanish addon !!This will disable the vanish toggle!!
-    vanishcommand: "vanish" #Set this to your vanish command if not using our built in vanish :)
+    vanishcommand: "vanish" #Set this to your vanish command if not using our vanish addon!
 command punish <offlineplayer>:
     permission: staff.member
     trigger:
@@ -313,7 +313,8 @@ on join:
         set slot 1 of player's inventory to a ice named "&b&lFreeze Player" with lore "&7Left Click on a player to freeze them"
         set slot 0 of player's inventory to a diamond axe named "&c&lBan Hammer" with lore "&7Left click on a player to punish them!"
         if {@vanish} is true:
-            execute player command "vanish"
+            if {vanished::*} doesn't contain player's uuid:
+                execute player command "vanish"
             set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
         else:
             set slot 8 of player's inventory to a potion of invisibility named "&f&lVanish" with lore "&3Right click&b to use!"        
@@ -367,10 +368,10 @@ on chat:
             if player doesn't have permission "filter.bypass":
                 set {_blockedmessage} to loop-value
                 cancel event
-                send "&cThe word&6&l %{_blockedmessage}%&r&c was blocked in your message!" to player
-                send "&cThe word&6&l %{_blockedmessage}%&r&c was blocked in %player's name%'s message!" to console
+                send "&cBlocked &8| &cThe word &4%{_blockedmessage}%&c was blocked in your message!" to player
+                send "&cBlocked &8| &cThe word &4%{_blockedmessage}%&c was blocked in &4%player's name%'s&c message!" to console
 command filteradd <text>:
-    permission: network.admin
+    permission: staff.admin
     trigger:
         if {filter::*} doesn't contain arg-1:
             add arg-1 to {filter::*}

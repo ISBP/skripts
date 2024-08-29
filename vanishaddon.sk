@@ -1,4 +1,8 @@
-#Vanish skript for staff tools!
+options:
+    jme: true #Enable custom join & leave messages (To hide when a staff member joins & leaves the game)
+    joinmessage: "&e%player's name% joined the game!" #Set the custom join message for non staff members
+    leavemessage: "&e%player's name% left the game!" #Set the custom leave message for non staff members
+#Vanish skript for staff tools (Addon)!
 command vanish:
     permission: staff.member
     trigger:
@@ -14,3 +18,15 @@ command vanish:
                     send "&3%player's name%&b unvanished!" to loop-player
             reveal player to all players
             remove player's uuid from {vanished::*}
+on join:
+    if {@jme} is true:
+        if {vanished::*} contain's player's uuid:
+            set join message to ""
+        else:
+            set join message to {@joinmessage}
+on leave:
+    if {@jme} is true:
+        if {vanished::*} contain's player's uuid:
+            set leave message to ""
+        else:
+            set leave message to {@leavemessage}
