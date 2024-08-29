@@ -1,6 +1,10 @@
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
 #Version 0.6
+options:
+    actionbar: true #set this to false to disable
+    vanish: false #Change this to false if you are using a different vanish plugin and not our vanish addon !!This will disable the vanish toggle!!
+    vanishcommand: "vanish" #Set this to your vanish command if not using our built in vanish :)
 command punish <offlineplayer>:
     permission: staff.member
     trigger:
@@ -259,6 +263,11 @@ on right click with gray dye:
                 if loop-player has permission "staff.member":
                     send "&3%player's name%&b vanished!" to loop-player
                     reveal player to loop-player
+on right click with potion of invisibility:
+    if name of player's tool is "&f&lVanish":
+        if player has permission "staff.member":
+            execute player command "vanish"
+            cancel event
 on join:
     if player doesn't have permission "staff.member":
         loop all players:
@@ -284,12 +293,18 @@ command staffmode:
             clear player's inventory
             set slot 1 of player's inventory to a ice named "&b&lFreeze Player" with lore "&7Right Click on a player to freeze them"
             set slot 0 of player's inventory to a diamond axe named "&c&lBan Hammer" with lore "&7Right click on a player to punish them!"
-            set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
             add player's uuid to {staffmode::*}
-            execute player command "vanish"
+            if {@vanish} is true:
+                if {vanished::*} doesn't contain player's uuid:
+                    execute player command "vanish"
+                set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
+            else:
+                set slot 8 of player's inventory to a potion of invisibility named "&f&lVanish" with lore "&3Right click&b to use!"
         else:
             clear player's inventory
             remove player's uuid from {staffmode::*}
+            if {@actionbar} is true:
+                send actionbar "&3Ping: &b%player's ping% &8| &3Vanished:&b True &8| &3Staffmode: &bDisabled" to player
 on join:
     if {staffmode::*} contains player's uuid:
         wait 2 ticks
@@ -297,8 +312,11 @@ on join:
         clear player's inventory
         set slot 1 of player's inventory to a ice named "&b&lFreeze Player" with lore "&7Left Click on a player to freeze them"
         set slot 0 of player's inventory to a diamond axe named "&c&lBan Hammer" with lore "&7Left click on a player to punish them!"
-        set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
-        
+        if {@vanish} is true:
+            execute player command "vanish"
+            set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
+        else:
+            set slot 8 of player's inventory to a potion of invisibility named "&f&lVanish" with lore "&3Right click&b to use!"        
 on leave:
     clear player's inventory
 on drop:
@@ -316,12 +334,6 @@ on block break:
 on pickup:
     if {staffmode::*} contains player's uuid:
         cancel event
-command rank <player> <text>:
-    permission: server.admin
-    trigger:
-        execute player command "lp user %arg-1's name% parent add %arg-2%"
-        send "&3Successfully set &b%arg-1's name%'s&3 rank to %formatted arg-1's prefix%!" to player
-        send "&3Your rank has been set to %formatted arg-1's prefix%&b!" to arg-1
 on chat:
     set {_message} to message
     replace "A" with "a" in {_message}
@@ -366,18 +378,27 @@ command filteradd <text>:
         else:
             send "&cError &8| &cThe filter already contains &4%arg-1%&c!"
 
-command vanish:
-    permission: staff.member
-    trigger:
-        if {vanished::*} doesn't contain player's uuid:
-            loop all players:
-                if loop-player has permission "staff.member":
-                    send "&3%player's name%&b vanished!" to loop-player
-                    reveal player to loop-player
-                    add player's uuid to {vanished::*}
-        else:
-            loop all players:
-                if loop-player has permission "staff.member":
-                    send "&3%player's name%&b unvanished!" to loop-player
-            reveal player to all players
-            remove player's uuid from {vanished::*}
+on join:
+    if {@actionbar} is true:
+        while player is online:
+            if {vanished::*} contains player's uuid:
+                set {_vanished} to "Enabled"
+                wait 5 ticks
+            else:
+                set {_vanished} to "Disabled"
+                wait 5 ticks
+            if {staffmode::*} contains player's uuid:
+                set {_sm} to "Enabled"
+                wait 5 ticks
+            else:
+                set {_sm} to "Disabled"
+                wait 1 second
+            if {staffmode::*} contains player's uuid:
+                if {@vanish} is true:
+                    send actionbar "&3Ping: &b%player's ping% &8| &3Vanish: &b%{_vanished}% &8| &3Staffmode: &bEnabled" to player
+                    wait 5 ticks
+                else:
+                    send actionbar "&3TPS: &b%tps% &8| &3Ping: &b%player's ping% &8| &3Staffmode: &bEnabled" to player
+                    wait 5 ticks  
+            else:
+                wait 5 ticks

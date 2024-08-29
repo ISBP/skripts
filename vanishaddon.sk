@@ -1,0 +1,16 @@
+#Vanish skript for staff tools!
+command vanish:
+    permission: staff.member
+    trigger:
+        if {vanished::*} doesn't contain player's uuid:
+            loop all players:
+                if loop-player has permission "staff.member":
+                    send "&3%player's name%&b vanished!" to loop-player
+                    reveal player to loop-player
+                    add player's uuid to {vanished::*}   
+        else:
+            loop all players:
+                if loop-player has permission "staff.member":
+                    send "&3%player's name%&b unvanished!" to loop-player
+            reveal player to all players
+            remove player's uuid from {vanished::*}
