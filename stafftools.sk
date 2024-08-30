@@ -1,6 +1,6 @@
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
-#Version 0.72
+#Version 0.73
 #When using the chat filter feature (/filteradd) make sure to type the word in lowercase as it will automatically convert the text into lowercase! 
 #This is to avoid chat filter bypass using caps
 options:
@@ -68,19 +68,25 @@ command punishbugabuse <offlineplayer>:
         if {punishments.%arg-1's uuid%} is greater than 2:
             execute console command "tempban %arg-1% 3mo Bug Abuse"
             broadcast "&c%arg-1%&8 was banned for &cBug Abuse &8[&c&l3 Months&8]"
-        send "&aSuccess" to player
+        send "&cPunish &8| &cSuccessfully punished &4%arg-1's name%&c!" to player
 command lockaccount <offlineplayer>:
     permission: staff.member
     trigger:
         if arg-1 does not have permission "staff.member":
-            add arg-1's uuid to {lockedaccounts::*}
-            send "&aSuccess!" to player
-            kick arg-1 due to "&cAccount Locked!"
+            if {lockedaccounts::*} does not contain arg-1's uuid:
+                add arg-1's uuid to {lockedaccounts::*}
+                send "&cLock &8| &cSuccessfully locked &4%arg-1's name%'s &caccount" to player
+                kick arg-1 due to "&cAccount Locked!"
+            else:
+                send "&cError &8| &4%arg-1's name%'s&c account has already been locked!"
 command unlockaccount <offlineplayer>:
     permission: staff.member
     trigger:
-        remove arg-1's uuid from {lockedaccounts::*}
-        send "&aSuccess" to player
+        if {lockedaccounts::*} contains arg-1's uuid:
+            remove arg-1's uuid from {lockedaccounts::*}
+            send "&2Unlock &8| &2Successfully unlocked &a%arg-1's name%'s &2account" to player
+        else:
+            send "&cError &8| &4%arg-1's name%'s&c account isn't locked!"
 on connect:
     if {lockedaccounts::*} contains player's uuid:
         kick player due to "&8[&cLocked Account&8]%nl%&cPlease contact an &8[&cAdmin&8]&c to resolve this."
@@ -101,7 +107,7 @@ command spampunish <offlineplayer>:
         if {punishments.%arg-1's uuid%} is greater than 2:
             execute console command "tempmute %arg-1% 1mo Spam"
             broadcast "&c%arg-1%&8 was muted for &cSpam &8[&c&l1 MONTH&8]"
-        send "&aSuccess" to player
+        send "&cPunish &8|&c Successfully punished &4%arg-1's name%&c!" to player
 
 on inventory click:
     if name of event-inventory is "&cPunish Player":
@@ -127,7 +133,7 @@ command punishhacker <offlineplayer>:
         if {punishments.%arg-1's uuid%} is greater than 2:
             execute console command "ban -s %arg-1% Cheating"
             broadcast "&c%arg-1%&8 was banned for &cCheating &8[&c&lPERM&8]"
-        send "&aSuccess" to player
+        send "&cPunish &8|&c Successfully punished &4%arg-1's name%&c!" to player
 command punishxrayer <offlineplayer>:
     permission: ab.tempban
     trigger:
@@ -145,7 +151,7 @@ command punishxrayer <offlineplayer>:
         if {punishments.%arg-1's uuid%} is greater than 2:
             execute console command "ban -s %arg-1% Xray"
             broadcast "&c%arg-1%&8 was banned for &cXray &8[&c&lPERM&8]"
-        send "&aSuccess" to player
+        send "&cPunish &8|&c Successfully punished &4%arg-1's name%&c!" to player
 command resetpunishments <offlineplayer>:
     permission: staff.admin
     trigger:
@@ -155,7 +161,7 @@ command resetpunishments <offlineplayer>:
             delete {punishments.%arg-1's uuid%.Executor.%{_ap}%}
             delete {punishments.%arg-1's uuid%.date.%{_ap}%}
         delete {punishments.%arg-1's uuid%} 
-        send "&aSuccess!"
+        send "&bReset &8|&b Successfully reset &3%arg-1's name%'s&b punishments!" to player
 
 
 command punishments <offline player>:
