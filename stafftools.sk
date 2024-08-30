@@ -407,7 +407,7 @@ on join:
                     send actionbar "&3Ping: &b%player's ping% &8| &3Vanish: &b%{_vanished}% &8| &3Staffmode: &bEnabled" to player
                     wait 5 ticks
                 else:
-                    send actionbar "&3TPS: &b%tps% &8| &3Ping: &b%player's ping% &8| &3Staffmode: &bEnabled" to player
+                    send actionbar "&3TPS: &b%tps from last minute% &8| &3Ping: &b%player's ping% &8| &3Staffmode: &bEnabled" to player
                     wait 5 ticks  
             else:
                 wait 5 ticks
