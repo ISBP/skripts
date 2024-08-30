@@ -1,7 +1,7 @@
 #In development for public use! |UNFINISHED| Requires Essentials, TAB and Skin Restorer
 command /disguise <text>:
 	permission: pbsi.disguise
-	cooldown: 1 minuet
+	cooldown: 1 minute
 	cooldown bypass: pbsi.disguise.nocooldown
 	trigger:
 		if arg-1 is "off":
