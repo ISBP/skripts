@@ -75,3 +75,27 @@ on chat:
         if player doesn't have permission "pbsi.mutechat.bypass":
             cancel event
             send "&bChat &8| &bChat is currently &3Muted&b!"
+
+command commandblocker <text> <text>:
+    permission: pbsi.commandblocker
+    trigger:
+        if arg-1 is "add":
+            if {blockedcommands::*} contains arg-2:
+                send "&cError &8| &4%arg-2%&c is already blocked!"
+            else:
+                add arg-2 to {blockedcommands::*}
+                send "&2Success &8| &2Successfully added &a%arg-2%&2 to the command blacklist!"
+        else:
+            if arg-1 is "remove":
+                if {blockedcommands::*} contains arg-2:
+                    remove arg-2 from {blockedcommands::*}
+                    send "&2Success &8| &2Successfully removed &a%arg-2%&2 from the command blacklist!"
+                else:
+                    send "&cError &8| &4%arg-2%&c is not blocked!"
+            else:
+                send "&cError &8| &cPlease select &4add &cor &4remove&c as your first argument!"
+on command:
+    if {blockedcommands::*} contains command:
+        if player does not have permission "pbsi.commandblocker.bypass":
+            cancel event
+            send "&cError &8| &4/%command%&c is blocked!"
