@@ -1,11 +1,12 @@
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
-#Version 0.73
+#Version 0.74
 #When using the chat filter feature (/filteradd) make sure to type the word in lowercase as it will automatically convert the text into lowercase! 
 #This is to avoid chat filter bypass using caps
 options:
     actionbar: true #set this to false to disable
     vanish: false #Change this to false if you are using a different vanish plugin and not our vanish addon !!This will disable the vanish toggle!!
+    pvp: false #Wether to allow pvp whilst in staff mode
     vanishcommand: "vanish" #Set this to your vanish command if not using our vanish addon!
 command punish <offlineplayer>:
     permission: staff.member
@@ -216,9 +217,11 @@ on right click with diamond axe:
 
 on damage:
     if name of attacker's tool is "&c&lBan Hammer":
-        cancel event
-        send "&8You are punishing&c %victim%" to attacker
-        execute attacker command "punish %victim%"
+        if {staffmode::*} contains attacker's uuid:
+            if victim is a player:
+                cancel event
+                send "&8You are punishing&c %victim%" to attacker
+                execute attacker command "punish %victim%"
 
 on left click with ice:
     if name of tool is "&b&lFreeze Player":
@@ -411,3 +414,7 @@ on join:
                     wait 5 ticks  
             else:
                 wait 5 ticks
+on damage:
+    if {@pvp} is false:
+        if {staffmode::*} contains attacker's uuid:
+            cancel event
