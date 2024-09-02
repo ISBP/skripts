@@ -28,3 +28,13 @@ command togglestaffchat:
 		else:
 			send "&aEnabled &8| &aEnabled your &2staff chat&a!"
 			remove player's uuid from {scd::*}
+command staffchat <text>:
+	permission: staff.chat
+	aliases: /sc
+	trigger:
+		loop all players:
+			if loop-player has permission "staff.chat":
+				if {scd::*} doesn't contain player's uuid:
+					send "&b&l[S]&r&3 [%{@name}%]&r &4%player%&r&7:&b %arg-1%" to loop-player
+			if {scd::*} contains player's uuid:
+				send "&cWarn &8| &cYou have staff chat &4disabled&c however your message was still sent!"
