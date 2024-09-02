@@ -1,0 +1,30 @@
+options:
+	prefix: "$"
+	name: "Event"
+on chat:
+	if first character of message = {@prefix}:
+		if player has permission "staff.chat":
+			set {_sc} to message
+			replace {@prefix} in {_sc} with ""
+			if {_sc} is not "":
+				cancel event
+				loop all players:
+					replace {@prefix} in message with ""
+					if loop-player has permission "staff.chat":
+						if {scd::*} doesn't contain loop-player's uuid:
+							send "&b&l[S]&r&3 [%{@name}%]&r &4%player%&r&7:&b %message%" to loop-player
+				if {scd::*} contains player's uuid:
+					send "&cWarn &8| &cYou have staff chat &4disabled&c however your message was still sent!"
+			else:
+				cancel event
+				send "&cError &8| &cYour message is &4Undefined&c!"
+
+command togglestaffchat:
+	permission: staff.chat
+	trigger:
+		if {scd::*} doesn't contain player's uuid:
+			send "&cDisabled &8| &cDisabled your &4staff chat&c!"
+			add player's uuid to {scd::*}
+		else:
+			send "&aEnabled &8| &aEnabled your &2staff chat&a!"
+			remove player's uuid from {scd::*}
