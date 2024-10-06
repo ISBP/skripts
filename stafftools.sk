@@ -1,13 +1,96 @@
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
-#Version 0.74
+#Version 0.840
 #When using the chat filter feature (/filteradd) make sure to type the word in lowercase as it will automatically convert the text into lowercase! 
 #This is to avoid chat filter bypass using caps
 options:
-    actionbar: true #set this to false to disable
+    actionbar: true #Set this to false to disable the action bar whilst in staff mode
     vanish: false #Change this to false if you are using a different vanish plugin and not our vanish addon !!This will disable the vanish toggle!!
-    pvp: false #Wether to allow pvp whilst in staff mode
+    pvp: false #Whether to allow pvp whilst in staff mode
     vanishcommand: "vanish" #Set this to your vanish command if not using our vanish addon!
+function punishbugabuse(target: player, sender: player):
+    add 1 to {punishments.%{_target}'s uuid%}
+    set {_ap} to {punishments.%{_target}'s uuid%}
+    set {punishments.%{_target}'s uuid%.type.%{_ap}%} to "BugAbuse"
+    set {punishments.%{_target}'s uuid%.Executor.%{_ap}%} to {_sender}'s name
+    set {punishments.%{_target}'s uuid%.date.%{_ap}%} to now
+    if {punishments.%{_target}'s uuid%} is 1:
+        execute console command "tempban -s %{_target}'s name% 1w Bug Abuse"
+        broadcast "&c%{_target}'s name%&8 was banned for &cBug Abuse &8[&c&l7 DAYS&8]"
+    if {punishments.%{_target}'s uuid%} is 2:
+        execute console command "tempban -s %{_target}'s name% 1mo Bug Abuse"
+        broadcast "&c%{_target}'s name%&8 was banned for &cBug Abuse &8[&c&l30 DAYS&8]"
+    if {punishments.%{_target}'s uuid%} is greater than 2:
+        execute console command "tempban -s %{_target}'s name% 3mo Bug Abuse"
+        broadcast "&c%{_target}'s name%&8 was banned for &cBug Abuse &8[&c&l3 Months&8]"
+    send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
+
+function punishspam(target: player, sender: player):
+    add 1 to {punishments.%{_target}'s uuid%}
+    set {_ap} to {punishments.%{_target}'s uuid%}
+    set {punishments.%{_target}'s uuid%.type.%{_ap}%} to "Spam"
+    set {punishments.%{_target}'s uuid%.Executor.%{_ap}%} to {_sender}'s name
+    set {punishments.%{_target}'s uuid%.date.%{_ap}%} to now
+    if {punishments.%{_target}'s uuid%} is 1:
+        execute console command "tempmute -s %{_target}'s name% 1h Spam"
+        broadcast "&c%{_target}'s name%&8 was muted for &cSpam &8[&c&l1 HOUR&8]"
+        stop
+    if {punishments.%{_target}'s uuid%} is 2:
+        execute console command "tempmute -s %{_target}'s name% 12h Spam"
+        broadcast "&c%{_target}'s name%&8 was muted for &cSpam &8[&c&l12 HOURS&8]"
+        stop
+    if {punishments.%{_target}'s uuid%} is 3:
+        execute console command "tempmute -s %{_target}'s name% 3d Spam"
+        broadcast "&c%{_target}'s name%&8 was muted for &cSpam &8[&c&l3 DAYS&8]"
+        stop
+    else:
+        execute console command "tempmute -s %{_target}'s name% 7d Spam"
+        broadcast "&c%{_target}'s name%&8 was muted for &cSpam &8[&c&l7 DAYS&8]"
+        stop
+    send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
+
+function punishhacker(target: player, sender: player):
+    add 1 to {punishments.%{_target}'s uuid%}
+    set {_ap} to {punishments.%{_target}'s uuid%}
+    set {punishments.%{_target}'s uuid%.type.%{_ap}%} to "Cheating"
+    set {punishments.%{_target}'s uuid%.Executor.%{_ap}%} to {_sender}'s name
+    set {punishments.%{_target}'s uuid%.date.%{_ap}%} to now
+    if {punishments.%{_target}'s uuid%} is 1:
+        execute console command "tempban -s %{_target}'s name% 1mo Cheating"
+        broadcast "&c%{_target}'s name%&8 was banned for &cCheating &8[&c&l60 DAYS&8]"
+    if {punishments.%{_target}'s uuid%} is 2:
+        execute console command "tempban -s %{_target}'s name% 3mo Cheating"
+        broadcast "&c%{_target}'s name%&8 was banned for &cCheating &8[&c&l90 DAYS&8]"
+    if {punishments.%{_target}'s uuid%} is greater than 2:
+        execute console command "ban -s %{_target}'s name% Cheating"
+        broadcast "&c%{_target}'s name%&8 was banned for &cCheating &8[&c&lPERM&8]"
+    send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
+
+function punishxrayer(target: player, sender: player):
+    add 1 to {punishments.%{_target}'s uuid%}
+    set {_ap} to {punishments.%{_target}'s uuid%}
+    set {punishments.%{_target}'s uuid%.type.%{_ap}%} to "Xray"
+    set {punishments.%{_target}'s uuid%.Executor.%{_ap}%} to {_sender}'s name
+    set {punishments.%{_target}'s uuid%.date.%{_ap}%} to now
+    if {punishments.%{_target}'s uuid%} is 1:
+        execute console command "tempban -s %{_target}'s name% 15d X-Ray"
+        broadcast "&c%{_target}'s name%&8 was banned for &cX-Ray &8[&c&l15 DAYS&8]"
+        stop
+    if {punishments.%{_target}'s uuid%} is 2:
+        execute console command "tempban -s %{_target}'s name% 1mo X-Ray"
+        broadcast "&c%{_target}'s name%&8 was banned for &cX-Ray &8[&c&l30 DAYS&8]"
+        stop
+    if {punishments.%{_target}'s uuid%} is greater than 2:
+        execute console command "tempban %{_target}'s name% 90d X-Ray"
+        broadcast "&c%{_target}'s name%&8 was banned for &cX-Ray &8[&c&l90 DAYS&8]"
+        stop
+    else:
+        execute console command "ban -s %{_target}'s name% X-Ray"
+        broadcast "&c%{_target}'s name%&8 was banned for &cX-Ray &8[&c&lPERM&8]"
+    send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
+
+
+
 command punish <offlineplayer>:
     permission: staff.member
     trigger:
@@ -48,28 +131,14 @@ on inventory click:
             execute player command "spampunish %{punishedplayer.%player's uuid%}%"
         if index of event-slot = 13:
             execute player command "mute %{punishedplayer.%player's uuid%}% Racism/Discrimination"
-            execute player command "tempban -s %{punishedplayer.%player's uuid%}% Racism/Discrimination"
+            execute player command "tempban -s %{punishedplayer.%player's uuid%}% 1h Racism/Discrimination"
         if index of event-slot = 15:
             execute player command "lockaccount %{punishedplayer.%player's uuid%}%"
             
 command punishbugabuse <offlineplayer>:
     permission: ab.tempban
     trigger:
-        add 1 to {punishments.%arg-1's uuid%}
-        set {_ap} to {punishments.%arg-1's uuid%}
-        set {punishments.%arg-1's uuid%.type.%{_ap}%} to "BugAbuse"
-        set {punishments.%arg-1's uuid%.Executor.%{_ap}%} to "%player%"
-        set {punishments.%arg-1's uuid%.date.%{_ap}%} to now
-        if {punishments.%arg-1's uuid%} is 1:
-            execute console command "tempban -s %arg-1% 1w Bug Abuse"
-            broadcast "&c%arg-1%&8 was banned for &cBug Abuse &8[&c&l7 DAYS&8]"
-        if {punishments.%arg-1's uuid%} is 2:
-            execute console command "tempban -s %arg-1% 1mo Bug Abuse"
-            broadcast "&c%arg-1%&8 was banned for &cBug Abuse &8[&c&l30 DAYS&8]"
-        if {punishments.%arg-1's uuid%} is greater than 2:
-            execute console command "tempban %arg-1% 3mo Bug Abuse"
-            broadcast "&c%arg-1%&8 was banned for &cBug Abuse &8[&c&l3 Months&8]"
-        send "&cPunish &8| &cSuccessfully punished &4%arg-1's name%&c!" to player
+        punishbugabuse(arg-1, player)
 command lockaccount <offlineplayer>:
     permission: staff.member
     trigger:
@@ -94,21 +163,7 @@ on connect:
 command spampunish <offlineplayer>:
     permission: ab.tempmute
     trigger:
-        add 1 to {punishments.%arg-1's uuid%}
-        set {_ap} to {punishments.%arg-1's uuid%}
-        set {punishments.%arg-1's uuid%.type.%{_ap}%} to "Spam"
-        set {punishments.%arg-1's uuid%.Executor.%{_ap}%} to player
-        set {punishments.%arg-1's uuid%.date.%{_ap}%} to now
-        if {punishments.%arg-1's uuid%} is 1:
-            execute console command "tempmute -s %arg-1% 1h Spam"
-            broadcast "&c%arg-1%&8 was muted for &cSpam &8[&c&l1 HOUR&8]"
-        if {punishments.%arg-1's uuid%} is 2:
-            execute console command "tempmute -s %arg-1% 3d Spam"
-            broadcast "&c%arg-1%&8 was muted for &cSpam &8[&c&l3 DAYS&8]"
-        if {punishments.%arg-1's uuid%} is greater than 2:
-            execute console command "tempmute %arg-1% 1mo Spam"
-            broadcast "&c%arg-1%&8 was muted for &cSpam &8[&c&l1 MONTH&8]"
-        send "&cPunish &8|&c Successfully punished &4%arg-1's name%&c!" to player
+        punishspam(arg-1, player)
 
 on inventory click:
     if name of event-inventory is "&cPunish Player":
@@ -120,39 +175,11 @@ on inventory click:
 command punishhacker <offlineplayer>:
     permission: ab.tempban
     trigger:
-        add 1 to {punishments.%arg-1's uuid%}
-        set {_ap} to {punishments.%arg-1's uuid%}
-        set {punishments.%arg-1's uuid%.type.%{_ap}%} to "Cheating"
-        set {punishments.%arg-1's uuid%.Executor.%{_ap}%} to "%player%"
-        set {punishments.%arg-1's uuid%.date.%{_ap}%} to now
-        if {punishments.%arg-1's uuid%} is 1:
-            execute console command "tempban -s %arg-1% 2mo Cheating"
-            broadcast "&c%arg-1%&8 was banned for &cCheating &8[&c&l60 DAYS&8]"
-        if {punishments.%arg-1's uuid%} is 2:
-            execute console command "tempban -s %arg-1% 6mo Cheating"
-            broadcast "&c%arg-1%&8 was banned for &cCheating &8[&c&l180 DAYS&8]"
-        if {punishments.%arg-1's uuid%} is greater than 2:
-            execute console command "ban -s %arg-1% Cheating"
-            broadcast "&c%arg-1%&8 was banned for &cCheating &8[&c&lPERM&8]"
-        send "&cPunish &8|&c Successfully punished &4%arg-1's name%&c!" to player
+        punishhacker(arg-1, player)
 command punishxrayer <offlineplayer>:
     permission: ab.tempban
     trigger:
-        add 1 to {punishments.%arg-1's uuid%}
-        set {_ap} to {punishments.%arg-1's uuid%}
-        set {punishments.%arg-1's uuid%.type.%{_ap}%} to "Xray"
-        set {punishments.%arg-1's uuid%.Executor.%{_ap}%} to player
-        set {punishments.%arg-1's uuid%.date.%{_ap}%} to now
-        if {punishments.%arg-1's uuid%} is 1:
-            execute console command "tempban -s %arg-1% 1mo Xray"
-            broadcast "&c%arg-1%&8 was banned for &cXray &8[&c&l30 DAYS&8]"
-        if {punishments.%arg-1's uuid%} is 2:
-            execute console command "tempban -s %arg-1% 3mo Xray"
-            broadcast "&c%arg-1%&8 was banned for &cXray &8[&c&l90 DAYS&8]"
-        if {punishments.%arg-1's uuid%} is greater than 2:
-            execute console command "ban -s %arg-1% Xray"
-            broadcast "&c%arg-1%&8 was banned for &cXray &8[&c&lPERM&8]"
-        send "&cPunish &8|&c Successfully punished &4%arg-1's name%&c!" to player
+        punishxrayer(arg-1, player)
 command resetpunishments <offlineplayer>:
     permission: staff.admin
     trigger:
@@ -163,8 +190,6 @@ command resetpunishments <offlineplayer>:
             delete {punishments.%arg-1's uuid%.date.%{_ap}%}
         delete {punishments.%arg-1's uuid%} 
         send "&bReset &8|&b Successfully reset &3%arg-1's name%'s&b punishments!" to player
-
-
 command punishments <offline player>:
     permission: staff.member
     trigger:
