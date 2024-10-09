@@ -1,6 +1,6 @@
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
-#Version 0.840
+#Version 0.8.40
 #When using the chat filter feature (/filteradd) make sure to type the word in lowercase as it will automatically convert the text into lowercase! 
 #This is to avoid chat filter bypass using caps
 options:
