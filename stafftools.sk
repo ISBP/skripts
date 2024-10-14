@@ -1,6 +1,6 @@
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
-#Version 0.8.41
+#Version 0.8.42
 #When using the chat filter feature (/filteradd) make sure to type the word in lowercase as it will automatically convert the text into lowercase! 
 #This is to avoid chat filter bypass using caps
 options:
@@ -8,7 +8,7 @@ options:
     vanish: false #Change this to false if you are using a different vanish plugin and not our vanish addon !!This will disable the vanish toggle!!
     pvp: false #Whether to allow pvp whilst in staff mode
     vanishcommand: "vanish" #Set this to your vanish command if not using our vanish addon!
-    freezecommand: "vulcan freeze %{_tp}%"
+    freezecommand: "vulcan freeze %{_target}%"
 function punishbugabuse(target: player, sender: player):
     add 1 to {punishments.%{_target}'s uuid%}
     set {_ap} to {punishments.%{_target}'s uuid%}
@@ -252,8 +252,8 @@ on damage:
 on left click with ice:
     if name of tool is "&b&lFreeze Player":
         if player has permission "staff.member": #change this to staff mode future me :D
-            set {_tp} to target player
-            if {_tp} is not set:
+            set {_target} to target player
+            if {_target} is not set:
                 wait 1 tick
             else:
                 cancel event
@@ -264,8 +264,8 @@ on right click with ice:
     if {cooldown.%player's name%} is not set:
         if name of tool is "&b&lFreeze Player":
             if player has permission "staff.member": #change this to staff mode future me :D
-                set {_tp} to target player
-                if {_tp} is not set:
+                set {_target} to target player
+                if {_target} is not set:
                     wait 1 tick
                 else:
                     if {cooldown.%player's name%} is not set:
