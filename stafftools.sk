@@ -1,7 +1,7 @@
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
-#Version 0.8.42
-#When using the chat filter feature (/filteradd) make sure to type the word in lowercase as it will automatically convert the text into lowercase! 
+#Version 0.8.43
+#When using the chat filter feature (/filteradd) make sure to type the word in lowercase as it will automatically convert the blocked text into lowercase for checking! 
 #This is to avoid chat filter bypass using caps
 options:
     actionbar: true #Set this to false to disable the action bar whilst in staff mode
@@ -416,6 +416,14 @@ command filteradd <text>:
             send "&bSuccessfully added &3%arg-1%&b to the filter!"
         else:
             send "&cError &8| &cThe filter already contains &4%arg-1%&c!"
+command filterremove <text>:
+    permission: staff.admin
+    trigger:
+        if {filter::*} contains arg-1:
+            remove arg-1 from {filter::*}
+            send "&bSuccessfully removed &3%arg-1%&b to the filter!"
+        else:
+            send "&cError &8| &cThe filter does not contain &4%arg-1%&c!"
 
 on join:
     if {@actionbar} is true:
