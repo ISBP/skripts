@@ -1,6 +1,6 @@
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
-#Version 0.8.43
+#Version 0.8.44
 #When using the chat filter feature (/filteradd) make sure to type the word in lowercase as it will automatically convert the blocked text into lowercase for checking! 
 #This is to avoid chat filter bypass using caps
 options:
@@ -374,33 +374,7 @@ on pickup:
     if {staffmode::*} contains player's uuid:
         cancel event
 on chat:
-    set {_message} to message
-    replace "A" with "a" in {_message}
-    replace "B" with "b" in {_message}
-    replace "C" with "c" in {_message}
-    replace "D" with "d" in {_message}
-    replace "E" with "e" in {_message}
-    replace "F" with "f" in {_message}
-    replace "G" with "g" in {_message}
-    replace "H" with "h" in {_message}
-    replace "I" with "i" in {_message}
-    replace "J" with "j" in {_message}
-    replace "K" with "k" in {_message}
-    replace "L" with "l" in {_message}
-    replace "M" with "m" in {_message}
-    replace "N" with "n" in {_message}
-    replace "O" with "o" in {_message}
-    replace "P" with "p" in {_message}
-    replace "Q" with "q" in {_message}
-    replace "R" with "r" in {_message}
-    replace "S" with "s" in {_message}
-    replace "T" with "t" in {_message}
-    replace "U" with "u" in {_message}
-    replace "V" with "v" in {_message}
-    replace "W" with "w" in {_message}
-    replace "X" with "x" in {_message}
-    replace "Y" with "y" in {_message}
-    replace "Z" with "z" in {_message}
+    set {_message} to message in lowercase 
     loop {filter::*}:
         if {_message} contains loop-value:
             if player doesn't have permission "filter.bypass":
@@ -408,22 +382,34 @@ on chat:
                 cancel event
                 send "&cBlocked &8| &cThe word &4%{_blockedmessage}%&c was blocked in your message!" to player
                 send "&cBlocked &8| &cThe word &4%{_blockedmessage}%&c was blocked in &4%player's name%'s&c message!" to console
-command filteradd <text>:
+
+command filter <text> [<text>]: #Todo: Make filter GUI! :D
     permission: staff.admin
     trigger:
-        if {filter::*} doesn't contain arg-1:
-            add arg-1 to {filter::*}
-            send "&bSuccessfully added &3%arg-1%&b to the filter!"
-        else:
-            send "&cError &8| &cThe filter already contains &4%arg-1%&c!"
-command filterremove <text>:
-    permission: staff.admin
-    trigger:
-        if {filter::*} contains arg-1:
-            remove arg-1 from {filter::*}
-            send "&bSuccessfully removed &3%arg-1%&b to the filter!"
-        else:
-            send "&cError &8| &cThe filter does not contain &4%arg-1%&c!"
+        if arg-1 is not "add" or "list" or "remove":
+            send "&cWarn &8| &cInvalid subcommand, please use &4add&c, &4list&c, or &4remove&c!"
+        if arg-1 is "add":
+            if arg-2 is not set:
+                send "&cWarn &8| &cPlease type the text to &4add&c to the filter!"
+            else:
+                if {filter::*} doesn't contain arg-2:
+                    send "&bSuccessfully added &3%arg-2%&b to the filter!" to player
+                    add arg-2 to {filter::*}
+                else:
+                    send "&cError &8| &cThe filter already contains &4%arg-2%&c!"
+        if arg-1 is "remove":
+            if arg-2 is not set:
+                send "&cWarn &8| &cPlease type the text to &4remove&c from the filter!"
+            else:
+                if {filter::*} contains arg-2:
+                    send "&bSuccessfully removed &3%arg-2%&b from the filter!" to player
+                    remove arg-2 from {filter::*}
+                else:
+                    send "&cError &8| &cThe filter does not contains &4%arg-2%&c!"
+        if arg-1 is "list":
+            loop {filter::*}:
+                add 1 to {_count}
+                send "&b%{_count}%. &8| &3%loop-value%"
 
 on join:
     if {@actionbar} is true:
