@@ -18,6 +18,16 @@ options:
     freezecommand: "freeze %{_target}%"
     sound: "entity.experience_orb.pickup"
     errorsound: "block.anvil.place"
+
+# ╔───────────────────────────────────────────────╗
+# │ _____                 _   _                 _ │
+# │|  ___|   _ _ __   ___| |_(_) ___  _ __  ___| |│
+# │| |_ | | | | '_ \ / __| __| |/ _ \| '_ \/ __| |│
+# │|  _|| |_| | | | | (__| |_| | (_) | | | \__ \_|│
+# │|_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|___(_)│
+# ╚───────────────────────────────────────────────╝
+
+
 function punishbugabuse(target: player, sender: player):
     add 1 to {punishments.%{_target}'s uuid%}
     set {_ap} to {punishments.%{_target}'s uuid%}
@@ -100,6 +110,14 @@ function punishxrayer(target: player, sender: player):
     send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
 
 
+# ╔────────────────────────────────────────────────────────╗
+# │  ____                                          _     _ │
+# │ / ___|___  _ __ ___  _ __ ___   __ _ _ __   __| |___| |│
+# │| |   / _ \| '_ ` _ \| '_ ` _ \ / _` | '_ \ / _` / __| |│
+# │| |__| (_) | | | | | | | | | | | (_| | | | | (_| \__ \_|│
+# │ \____\___/|_| |_| |_|_| |_| |_|\__,_|_| |_|\__,_|___(_)│
+# ╚────────────────────────────────────────────────────────╝
+
 
 command punish <offlineplayer>:
     permission: staff.member
@@ -111,39 +129,7 @@ command punish <offlineplayer>:
         set slot 14 of {_pgui} to a hopper named "&c&lBug Abusing"
         set slot 16 of {_pgui} to a book and quill named "&c&lChat Abuse"
         open {_pgui} to player
-on inventory click:
-    if name of event-inventory is "&cPunish Player":
-        if index of event-slot = 10: 
-            execute player command "punishhacker %{punishedplayer.%player's uuid%}%"
-        if index of event-slot = 12: 
-            execute player command "punishxrayer %{punishedplayer.%player's uuid%}%"
-        if index of event-slot = 14:
-            set {_bagui} to a new chest inventory with 3 rows named "&c&lBug Abusing"
-            set slot 11 of {_bagui} to a hopper named "&c&lDuping"
-            set slot 13 of {_bagui} to a redstone block named "&c&lBlock Glitching" with lore "&8And other glitches that give an advantage"
-            set slot 15 of {_bagui} to a book named "&c&lGeneral Bug Usage" with lore "&8Failing to report meaningful bugs."
-            open {_bagui} to player
-        if index of event-slot = 16:
-            set {_cagui} to a new chest inventory with 3 rows named "&c&lChat Abuse"
-            set slot 11 of {_cagui} to a book named "&c&lSpam"
-            set slot 13 of {_cagui} to a barrier named "&c&lRacism" with lore "&8And anything else discriminatory to a player"
-            set slot 15 of {_cagui} to a compass named "&c&lDoxxing/DDoSing Threats" with lore "&8This includes any threats to do anything that is a crime."
-            open {_cagui} to player
-    if name of event-inventory is "&c&lBug Abusing":
-        if index of event-slot = 11:
-            execute player command "lockaccount %{punishedplayer.%player's uuid%}%"
-        if index of event-slot = 13:
-            execute player command "punishBugAbuse %{punishedplayer.%player's uuid%}%"
-        if index of event-slot = 15:
-            execute player command "tempban %{punishedplayer.%player's uuid%}% 1h Failure to report bugs."
-    if name of event-inventory is "&c&lChat Abuse":
-        if index of event-slot = 11:
-            execute player command "spampunish %{punishedplayer.%player's uuid%}%"
-        if index of event-slot = 13:
-            execute player command "mute %{punishedplayer.%player's uuid%}% Racism/Discrimination"
-            execute player command "tempban -s %{punishedplayer.%player's uuid%}% 1h Racism/Discrimination"
-        if index of event-slot = 15:
-            execute player command "lockaccount %{punishedplayer.%player's uuid%}%"
+
             
 command punishbugabuse <offlineplayer>:
     permission: ab.tempban
@@ -184,13 +170,6 @@ command spampunish <offlineplayer>:
         play sound {@sound} with volume 0.5 and pitch 2 at player 
         punishspam(arg-1, player)
 
-on inventory click:
-    if name of event-inventory is "&cPunish Player":
-        cancel event
-    if name of event-inventory is "&c&lBug Abusing":
-        cancel event
-    if name of event-inventory is "&c&lChat Abuse":
-        cancel event
 command punishhacker <offlineplayer>:
     permission: ab.tempban
     trigger:
@@ -226,6 +205,119 @@ command punishments <offline player>:
             add 1 to {_values}
         set slot 0 of {_plist} to arg-1's head named "&c&l%arg-1%'s Punishments" with lore "&8UUID:&c %arg-1's uuid%" and "&8First Join:&c %{sm::%arg-1's uuid%.joindate}%" and "&8Last Join:&c %{sm::%arg-1's uuid%.lastjoin}%"
         open {_plist} to player
+
+command staffmode:
+    permission: staff.member
+    trigger:
+        if {staffmode::*} doesn't contain player's uuid:
+            clear player's inventory
+            set slot 1 of player's inventory to a ice named "&b&lFreeze Player" with lore "&7Right Click on a player to freeze them"
+            set slot 0 of player's inventory to a diamond axe named "&c&lBan Hammer" with lore "&7Right click on a player to punish them!"
+            add player's uuid to {staffmode::*}
+            if {@vanish} is true:
+                if {vanished::*} doesn't contain player's uuid:
+                    execute player command "vanish"
+                set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
+            else:
+                set slot 8 of player's inventory to a potion of invisibility named "&f&lVanish" with lore "&3Right click&b to use!"
+        else:
+            clear player's inventory
+            remove player's uuid from {staffmode::*}
+            if {@actionbar} is true:
+                send actionbar "&3Ping: &b%player's ping% &8| &3Vanished:&b True &8| &3Staffmode: &bDisabled" to player
+
+command filter <text> [<text>]: #Todo: Make filter GUI! :D
+    permission: staff.admin
+    trigger:
+        if arg-1 is not "add" or "list" or "remove":
+            send "&cError &8| &cInvalid subcommand, please use &4add&c, &4list&c, or &4remove&c!"
+            play sound {@errorsound} with volume 2 and pitch 1 at player
+        if arg-1 is "add":
+            if arg-2 is not set:
+                send "&cError &8| &cPlease type the text to &4add&c to the filter!"
+                play sound {@errorsound} with volume 2 and pitch 1 at player
+            else:
+                if {filter::*} doesn't contain arg-2:
+                    send "&bSuccessfully added &3%arg-2%&b to the filter!" to player
+                    play sound {@sound} with volume 0.5 and pitch 2 at player 
+                    add arg-2 to {filter::*}
+                else:
+                    send "&cError &8| &cThe filter already contains &4%arg-2%&c!"
+                    play sound {@errorsound} with volume 2 and pitch 1 at player
+        if arg-1 is "remove":
+            if arg-2 is not set:
+                send "&cError &8| &cPlease type the text to &4remove&c from the filter!"
+                play sound {@errorsound} with volume 2 and pitch 1 at player
+            else:
+                if {filter::*} contains arg-2:
+                    send "&bSuccessfully removed &3%arg-2%&b from the filter!" to player
+                    play sound {@sound} with volume 0.5 and pitch 2 at player 
+                    remove arg-2 from {filter::*}
+                else:
+                    send "&cError &8| &cThe filter does not contains &4%arg-2%&c!"
+                    play sound {@errorsound} with volume 2 and pitch 1 at player
+        if arg-1 is "list":
+            if {filter::*} is set:
+                send "&3&l💬&r&b Filter List&3:"
+                loop {filter::*}:
+                    add 1 to {_count}
+                    send "&b%{_count}%. &8| &3%loop-value%"
+                play sound {@sound} with volume 0.5 and pitch 2 at player 
+            else:
+                send "&eWarn &8| &eThe filter is &6empty&e!"
+                play sound {@errorsound} with volume 1 and pitch 1 at player
+
+
+# ╔─────────────────────────────────╗
+# │ _____                 _       _ │
+# │| ____|_   _____ _ __ | |_ ___| |│
+# │|  _| \ \ / / _ \ '_ \| __/ __| |│
+# │| |___ \ V /  __/ | | | |_\__ \_|│
+# │|_____| \_/ \___|_| |_|\__|___(_)│
+# ╚─────────────────────────────────╝
+
+
+on inventory click:
+    if name of event-inventory is "&cPunish Player":
+        if index of event-slot = 10: 
+            execute player command "punishhacker %{punishedplayer.%player's uuid%}%"
+        if index of event-slot = 12: 
+            execute player command "punishxrayer %{punishedplayer.%player's uuid%}%"
+        if index of event-slot = 14:
+            set {_bagui} to a new chest inventory with 3 rows named "&c&lBug Abusing"
+            set slot 11 of {_bagui} to a hopper named "&c&lDuping"
+            set slot 13 of {_bagui} to a redstone block named "&c&lBlock Glitching" with lore "&8And other glitches that give an advantage"
+            set slot 15 of {_bagui} to a book named "&c&lGeneral Bug Usage" with lore "&8Failing to report meaningful bugs."
+            open {_bagui} to player
+        if index of event-slot = 16:
+            set {_cagui} to a new chest inventory with 3 rows named "&c&lChat Abuse"
+            set slot 11 of {_cagui} to a book named "&c&lSpam"
+            set slot 13 of {_cagui} to a barrier named "&c&lRacism" with lore "&8And anything else discriminatory to a player"
+            set slot 15 of {_cagui} to a compass named "&c&lDoxxing/DDoSing Threats" with lore "&8This includes any threats to do anything that is a crime."
+            open {_cagui} to player
+    if name of event-inventory is "&c&lBug Abusing":
+        if index of event-slot = 11:
+            execute player command "lockaccount %{punishedplayer.%player's uuid%}%"
+        if index of event-slot = 13:
+            execute player command "punishBugAbuse %{punishedplayer.%player's uuid%}%"
+        if index of event-slot = 15:
+            execute player command "tempban %{punishedplayer.%player's uuid%}% 1h Failure to report bugs."
+    if name of event-inventory is "&c&lChat Abuse":
+        if index of event-slot = 11:
+            execute player command "spampunish %{punishedplayer.%player's uuid%}%"
+        if index of event-slot = 13:
+            execute player command "mute %{punishedplayer.%player's uuid%}% Racism/Discrimination"
+            execute player command "tempban -s %{punishedplayer.%player's uuid%}% 1h Racism/Discrimination"
+        if index of event-slot = 15:
+            execute player command "lockaccount %{punishedplayer.%player's uuid%}%"
+on inventory click:
+    if name of event-inventory is "&cPunish Player":
+        cancel event
+    if name of event-inventory is "&c&lBug Abusing":
+        cancel event
+    if name of event-inventory is "&c&lChat Abuse":
+        cancel event
+
 
 on inventory click:
     if name of event-inventory is "&cPast Punishments":
@@ -342,25 +434,7 @@ on leave:
             if loop-player has permission "staff.member":
                 send "&3%player's name%&b left silently!"
         set leave message to ""
-command staffmode:
-    permission: staff.member
-    trigger:
-        if {staffmode::*} doesn't contain player's uuid:
-            clear player's inventory
-            set slot 1 of player's inventory to a ice named "&b&lFreeze Player" with lore "&7Right Click on a player to freeze them"
-            set slot 0 of player's inventory to a diamond axe named "&c&lBan Hammer" with lore "&7Right click on a player to punish them!"
-            add player's uuid to {staffmode::*}
-            if {@vanish} is true:
-                if {vanished::*} doesn't contain player's uuid:
-                    execute player command "vanish"
-                set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
-            else:
-                set slot 8 of player's inventory to a potion of invisibility named "&f&lVanish" with lore "&3Right click&b to use!"
-        else:
-            clear player's inventory
-            remove player's uuid from {staffmode::*}
-            if {@actionbar} is true:
-                send actionbar "&3Ping: &b%player's ping% &8| &3Vanished:&b True &8| &3Staffmode: &bDisabled" to player
+
 on join:
     if {staffmode::*} contains player's uuid:
         wait 2 ticks
@@ -402,46 +476,6 @@ on chat:
                 send "&cBlocked &8| &cThe word &4%{_blockedmessage}%&c was blocked in &4%player's name%'s&c message!" to console
                 play sound {@errorsound} with volume 2 and pitch 1 at player
 
-command filter <text> [<text>]: #Todo: Make filter GUI! :D
-    permission: staff.admin
-    trigger:
-        if arg-1 is not "add" or "list" or "remove":
-            send "&cError &8| &cInvalid subcommand, please use &4add&c, &4list&c, or &4remove&c!"
-            play sound {@errorsound} with volume 2 and pitch 1 at player
-        if arg-1 is "add":
-            if arg-2 is not set:
-                send "&cError &8| &cPlease type the text to &4add&c to the filter!"
-                play sound {@errorsound} with volume 2 and pitch 1 at player
-            else:
-                if {filter::*} doesn't contain arg-2:
-                    send "&bSuccessfully added &3%arg-2%&b to the filter!" to player
-                    play sound {@sound} with volume 0.5 and pitch 2 at player 
-                    add arg-2 to {filter::*}
-                else:
-                    send "&cError &8| &cThe filter already contains &4%arg-2%&c!"
-                    play sound {@errorsound} with volume 2 and pitch 1 at player
-        if arg-1 is "remove":
-            if arg-2 is not set:
-                send "&cError &8| &cPlease type the text to &4remove&c from the filter!"
-                play sound {@errorsound} with volume 2 and pitch 1 at player
-            else:
-                if {filter::*} contains arg-2:
-                    send "&bSuccessfully removed &3%arg-2%&b from the filter!" to player
-                    play sound {@sound} with volume 0.5 and pitch 2 at player 
-                    remove arg-2 from {filter::*}
-                else:
-                    send "&cError &8| &cThe filter does not contains &4%arg-2%&c!"
-                    play sound {@errorsound} with volume 2 and pitch 1 at player
-        if arg-1 is "list":
-            if {filter::*} is set:
-                send "&3&l💬&r&b Filter List&3:"
-                loop {filter::*}:
-                    add 1 to {_count}
-                    send "&b%{_count}%. &8| &3%loop-value%"
-                play sound {@sound} with volume 0.5 and pitch 2 at player 
-            else:
-                send "&eWarn &8| &eThe filter is &6empty&e!"
-                play sound {@errorsound} with volume 1 and pitch 1 at player
 
 
 on join:
