@@ -7,7 +7,7 @@
 # ╚─────────────────────────────────────────────────────────────╝
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
-#Version 0.8.46
+#Version 0.8.47
 #When using the chat filter feature (/filter add) make sure to type the word in lowercase as it will automatically convert the blocked text into lowercase for checking! 
 #This is to avoid chat filter bypass using caps
 options:
@@ -132,7 +132,7 @@ command punish <offlineplayer>:
 
             
 command punishbugabuse <offlineplayer>:
-    permission: ab.tempban
+    permission: staff.member
     trigger:
         punishbugabuse(arg-1, player)
         play sound {@sound} with volume 0.5 and pitch 2 at player 
@@ -165,17 +165,17 @@ on connect:
     if {lockedaccounts::*} contains player's uuid:
         kick player due to "&8[&cLocked Account&8]%nl%&cPlease contact an &8[&cAdmin&8]&c to resolve this."
 command spampunish <offlineplayer>:
-    permission: ab.tempmute
+    permission: staff.member
     trigger:
         play sound {@sound} with volume 0.5 and pitch 2 at player 
         punishspam(arg-1, player)
 
 command punishhacker <offlineplayer>:
-    permission: ab.tempban
+    permission: staff.member
     trigger:
         punishhacker(arg-1, player)
 command punishxrayer <offlineplayer>:
-    permission: ab.tempban
+    permission: staff.member
     trigger:
         punishxrayer(arg-1, player)
 command resetpunishments <offlineplayer>:
