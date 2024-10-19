@@ -7,7 +7,7 @@
 # ╚─────────────────────────────────────────────────────────────╝
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
-#Version 0.8.45
+#Version 0.8.46
 #When using the chat filter feature (/filter add) make sure to type the word in lowercase as it will automatically convert the blocked text into lowercase for checking! 
 #This is to avoid chat filter bypass using caps
 options:
@@ -16,6 +16,8 @@ options:
     pvp: false #Whether to allow pvp whilst in staff mode
     vanishcommand: "vanish" #Set this to your vanish command if not using our vanish addon!
     freezecommand: "freeze %{_target}%"
+    sound: "entity.experience_orb.pickup"
+    errorsound: "block.anvil.place"
 function punishbugabuse(target: player, sender: player):
     add 1 to {punishments.%{_target}'s uuid%}
     set {_ap} to {punishments.%{_target}'s uuid%}
@@ -147,6 +149,7 @@ command punishbugabuse <offlineplayer>:
     permission: ab.tempban
     trigger:
         punishbugabuse(arg-1, player)
+        play sound {@sound} with volume 0.5 and pitch 2 at player 
 command lockaccount <offlineplayer>:
     permission: staff.member
     trigger:
@@ -155,22 +158,30 @@ command lockaccount <offlineplayer>:
                 add arg-1's uuid to {lockedaccounts::*}
                 send "&cLock &8| &cSuccessfully locked &4%arg-1's name%'s &caccount" to player
                 kick arg-1 due to "&cAccount Locked!"
+                play sound {@sound} with volume 0.5 and pitch 2 at player 
             else:
                 send "&cError &8| &4%arg-1's name%'s&c account has already been locked!"
+                play sound {@errorsound} with volume 2 and pitch 1 at player
+        else:
+            send "&cError &8|&c You cannot lock a &4staff member&c's account!"
+            play sound {@errorsound} with volume 2 and pitch 1 at player
 command unlockaccount <offlineplayer>:
     permission: staff.member
     trigger:
         if {lockedaccounts::*} contains arg-1's uuid:
             remove arg-1's uuid from {lockedaccounts::*}
             send "&2Unlock &8| &2Successfully unlocked &a%arg-1's name%'s &2account" to player
+            play sound {@sound} with volume 0.5 and pitch 2 at player 
         else:
             send "&cError &8| &4%arg-1's name%'s&c account isn't locked!"
+            play sound {@errorsound} with volume 2 and pitch 1 at player
 on connect:
     if {lockedaccounts::*} contains player's uuid:
         kick player due to "&8[&cLocked Account&8]%nl%&cPlease contact an &8[&cAdmin&8]&c to resolve this."
 command spampunish <offlineplayer>:
     permission: ab.tempmute
     trigger:
+        play sound {@sound} with volume 0.5 and pitch 2 at player 
         punishspam(arg-1, player)
 
 on inventory click:
@@ -389,38 +400,48 @@ on chat:
                 cancel event
                 send "&cBlocked &8| &cThe word &4%{_blockedmessage}%&c was blocked in your message!" to player
                 send "&cBlocked &8| &cThe word &4%{_blockedmessage}%&c was blocked in &4%player's name%'s&c message!" to console
+                play sound {@errorsound} with volume 2 and pitch 1 at player
 
 command filter <text> [<text>]: #Todo: Make filter GUI! :D
     permission: staff.admin
     trigger:
         if arg-1 is not "add" or "list" or "remove":
             send "&cError &8| &cInvalid subcommand, please use &4add&c, &4list&c, or &4remove&c!"
+            play sound {@errorsound} with volume 2 and pitch 1 at player
         if arg-1 is "add":
             if arg-2 is not set:
                 send "&cError &8| &cPlease type the text to &4add&c to the filter!"
+                play sound {@errorsound} with volume 2 and pitch 1 at player
             else:
                 if {filter::*} doesn't contain arg-2:
                     send "&bSuccessfully added &3%arg-2%&b to the filter!" to player
+                    play sound {@sound} with volume 0.5 and pitch 2 at player 
                     add arg-2 to {filter::*}
                 else:
                     send "&cError &8| &cThe filter already contains &4%arg-2%&c!"
+                    play sound {@errorsound} with volume 2 and pitch 1 at player
         if arg-1 is "remove":
             if arg-2 is not set:
                 send "&cError &8| &cPlease type the text to &4remove&c from the filter!"
+                play sound {@errorsound} with volume 2 and pitch 1 at player
             else:
                 if {filter::*} contains arg-2:
                     send "&bSuccessfully removed &3%arg-2%&b from the filter!" to player
+                    play sound {@sound} with volume 0.5 and pitch 2 at player 
                     remove arg-2 from {filter::*}
                 else:
                     send "&cError &8| &cThe filter does not contains &4%arg-2%&c!"
+                    play sound {@errorsound} with volume 2 and pitch 1 at player
         if arg-1 is "list":
             if {filter::*} is set:
                 send "&3&l💬&r&b Filter List&3:"
                 loop {filter::*}:
                     add 1 to {_count}
                     send "&b%{_count}%. &8| &3%loop-value%"
+                play sound {@sound} with volume 0.5 and pitch 2 at player 
             else:
                 send "&eWarn &8| &eThe filter is &6empty&e!"
+                play sound {@errorsound} with volume 1 and pitch 1 at player
 
 
 on join:
@@ -465,6 +486,7 @@ command freeze <player>:
                 send "&2Success &8| &2Successfully unfroze &a%arg-1's uuid%&2!" to player
         else:
             send "&eWarn &8|&e The target player has is a &6staff member&e!" to player
+            play sound {@errorsound} with volume 1 and pitch 1 at player
 on player walk:
     if {freeze.%player's uuid%} is true:
         cancel event
