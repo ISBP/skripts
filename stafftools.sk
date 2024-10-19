@@ -7,7 +7,7 @@
 # ╚─────────────────────────────────────────────────────────────╝
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
-#Version 0.8.47
+#Version 0.8.48
 #When using the chat filter feature (/filter add) make sure to type the word in lowercase as it will automatically convert the blocked text into lowercase for checking! 
 #This is to avoid chat filter bypass using caps
 options:
@@ -236,9 +236,9 @@ command filter <text> [<text>]: #Todo: Make filter GUI! :D
                 play sound {@errorsound} with volume 2 and pitch 1 at player
             else:
                 if {filter::*} doesn't contain arg-2:
-                    send "&bSuccessfully added &3%arg-2%&b to the filter!" to player
+                    send "&bSuccessfully added &3%arg-2 in proper case%&b to the filter!" to player
                     play sound {@sound} with volume 0.5 and pitch 2 at player 
-                    add arg-2 to {filter::*}
+                    add arg-2 in proper case to {filter::*}
                 else:
                     send "&cError &8| &cThe filter already contains &4%arg-2%&c!"
                     play sound {@errorsound} with volume 2 and pitch 1 at player
