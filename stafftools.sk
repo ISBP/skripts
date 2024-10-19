@@ -161,9 +161,7 @@ command unlockaccount <offlineplayer>:
         else:
             send "&cError &8| &4%arg-1's name%'s&c account isn't locked!"
             play sound {@errorsound} with volume 2 and pitch 1 at player
-on connect:
-    if {lockedaccounts::*} contains player's uuid:
-        kick player due to "&8[&cLocked Account&8]%nl%&cPlease contact an &8[&cAdmin&8]&c to resolve this."
+
 command spampunish <offlineplayer>:
     permission: staff.member
     trigger:
@@ -276,7 +274,9 @@ command filter <text> [<text>]: #Todo: Make filter GUI! :D
 # │|_____| \_/ \___|_| |_|\__|___(_)│
 # ╚─────────────────────────────────╝
 
-
+on connect:
+    if {lockedaccounts::*} contains player's uuid:
+        kick player due to "&8[&cLocked Account&8]%nl%&cPlease contact an &8[&cAdmin&8]&c to resolve this."
 on inventory click:
     if name of event-inventory is "&cPunish Player":
         if index of event-slot = 10: 
