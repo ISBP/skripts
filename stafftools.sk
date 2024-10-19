@@ -1,14 +1,21 @@
+# ╔─────────────────────────────────────────────────────────────╗
+# │ ____  ____ ____ ___   ____  _  ______  ___ ____ _____ ____  │
+# │|  _ \| __ ) ___|_ _| / ___|| |/ /  _ \|_ _|  _ \_   _/ ___| │
+# │| |_) |  _ \___ \| |  \___ \| ' /| |_) || || |_) || | \___ \ │
+# │|  __/| |_) |__) | |   ___) | . \|  _ < | ||  __/ | |  ___) |│
+# │|_|   |____/____/___| |____/|_|\_\_| \_\___|_|    |_| |____/ │
+# ╚─────────────────────────────────────────────────────────────╝
 #Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
-#Version 0.8.44
-#When using the chat filter feature (/filteradd) make sure to type the word in lowercase as it will automatically convert the blocked text into lowercase for checking! 
+#Version 0.8.45
+#When using the chat filter feature (/filter add) make sure to type the word in lowercase as it will automatically convert the blocked text into lowercase for checking! 
 #This is to avoid chat filter bypass using caps
 options:
     actionbar: true #Set this to false to disable the action bar whilst in staff mode
     vanish: false #Change this to false if you are using a different vanish plugin and not our vanish addon !!This will disable the vanish toggle!!
     pvp: false #Whether to allow pvp whilst in staff mode
     vanishcommand: "vanish" #Set this to your vanish command if not using our vanish addon!
-    freezecommand: "vulcan freeze %{_target}%"
+    freezecommand: "freeze %{_target}%"
 function punishbugabuse(target: player, sender: player):
     add 1 to {punishments.%{_target}'s uuid%}
     set {_ap} to {punishments.%{_target}'s uuid%}
@@ -374,7 +381,7 @@ on pickup:
     if {staffmode::*} contains player's uuid:
         cancel event
 on chat:
-    set {_message} to message in lowercase 
+    set {_message} to message in lowercase #! All messages for the filter are parsed in lowercase!
     loop {filter::*}:
         if {_message} contains loop-value:
             if player doesn't have permission "filter.bypass":
@@ -387,10 +394,10 @@ command filter <text> [<text>]: #Todo: Make filter GUI! :D
     permission: staff.admin
     trigger:
         if arg-1 is not "add" or "list" or "remove":
-            send "&cWarn &8| &cInvalid subcommand, please use &4add&c, &4list&c, or &4remove&c!"
+            send "&cError &8| &cInvalid subcommand, please use &4add&c, &4list&c, or &4remove&c!"
         if arg-1 is "add":
             if arg-2 is not set:
-                send "&cWarn &8| &cPlease type the text to &4add&c to the filter!"
+                send "&cError &8| &cPlease type the text to &4add&c to the filter!"
             else:
                 if {filter::*} doesn't contain arg-2:
                     send "&bSuccessfully added &3%arg-2%&b to the filter!" to player
@@ -399,7 +406,7 @@ command filter <text> [<text>]: #Todo: Make filter GUI! :D
                     send "&cError &8| &cThe filter already contains &4%arg-2%&c!"
         if arg-1 is "remove":
             if arg-2 is not set:
-                send "&cWarn &8| &cPlease type the text to &4remove&c from the filter!"
+                send "&cError &8| &cPlease type the text to &4remove&c from the filter!"
             else:
                 if {filter::*} contains arg-2:
                     send "&bSuccessfully removed &3%arg-2%&b from the filter!" to player
@@ -407,9 +414,14 @@ command filter <text> [<text>]: #Todo: Make filter GUI! :D
                 else:
                     send "&cError &8| &cThe filter does not contains &4%arg-2%&c!"
         if arg-1 is "list":
-            loop {filter::*}:
-                add 1 to {_count}
-                send "&b%{_count}%. &8| &3%loop-value%"
+            if {filter::*} is set:
+                send "&3&l💬&r&b Filter List&3:"
+                loop {filter::*}:
+                    add 1 to {_count}
+                    send "&b%{_count}%. &8| &3%loop-value%"
+            else:
+                send "&eWarn &8| &eThe filter is &6empty&e!"
+
 
 on join:
     if {@actionbar} is true:
@@ -439,3 +451,25 @@ on damage:
     if {@pvp} is false:
         if {staffmode::*} contains attacker's uuid:
             cancel event
+command freeze <player>:
+    permission: staff.member
+    trigger:
+        if arg-1 does not have permission "staff.member":
+            if {freeze.%arg-1's uuid%} is not true:
+                send "&cAlert &8|&c You have been &4frozen&c!" to arg-1
+                send "&2Success &8| &2Successfully froze &a%arg-1's name%&2!" to player
+                set {freeze.%arg-1's uuid%} to true
+            else:
+                send "&cAlert &8|&c You have been &4unfrozen&c!" to arg-1
+                set {freeze.%arg-1's uuid%} to false
+                send "&2Success &8| &2Successfully unfroze &a%arg-1's uuid%&2!" to player
+        else:
+            send "&eWarn &8|&e The target player has is a &6staff member&e!" to player
+on player walk:
+    if {freeze.%player's uuid%} is true:
+        cancel event
+on chat:
+    if {freeze.%player's uuid%} is true:
+        cancel event
+        send "&cError &8|&c You are currently &4frozen&c!" to player
+        
