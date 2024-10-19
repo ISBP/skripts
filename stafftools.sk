@@ -544,7 +544,9 @@ on chat:
     if {freeze.%player's uuid%} is true:
         cancel event
         send "&cError &8|&c You are currently &4frozen&c!" to player
-        
+on damage:
+    if {staffmode::*} contains victim's uuid:
+        cancel event        
 # ╔───────────────────────────────────────────╗
 # │ _____ _           _   _             _ _ _ │
 # │|_   _| |__   __ _| |_( )___    __ _| | | |│
