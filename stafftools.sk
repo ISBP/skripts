@@ -29,8 +29,9 @@ options:
 #If you need help on configuring shoot me a DM on Discord (pbsi) ! 
 #Important things to note! The commands /punish[type] (I.E. /punishhacker) are required to make the GUIs work (fixing soon)!  
 #The punishment type set in functions must be kept the same for it to display in /punishments ! (You can change that yourself if you'd like ;) 
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 
 # ╔───────────────────────────────────────────────╗
@@ -302,6 +303,7 @@ command freeze <player>:
 # │| |___ \ V /  __/ | | | |_\__ \_|│
 # │|_____| \_/ \___|_| |_|\__|___(_)│
 # ╚─────────────────────────────────╝
+
 
 on connect:
     if {lockedaccounts::*} contains player's uuid:
