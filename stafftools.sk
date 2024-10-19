@@ -5,11 +5,9 @@
 # │|  __/| |_) |__) | |   ___) | . \|  _ < | ||  __/ | |  ___) |│
 # │|_|   |____/____/___| |____/|_|\_\_| \_\___|_|    |_| |____/ │
 # ╚─────────────────────────────────────────────────────────────╝
-#Currently made to work with Vulcan Anti Cheat and Advanced Ban, :)
+#Currently the Skript is designed to be used on Advanced Ban, if you would like it to work on other punishment plugins you'll need to configure it yourself!
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
 #Version 0.8.48
-#When using the chat filter feature (/filter add) make sure to type the word in lowercase as it will automatically convert the blocked text into lowercase for checking! 
-#This is to avoid chat filter bypass using caps
 options:
     actionbar: true #Set this to false to disable the action bar whilst in staff mode
     vanish: false #Change this to false if you are using a different vanish plugin and not our vanish addon !!This will disable the vanish toggle!!
@@ -18,6 +16,22 @@ options:
     freezecommand: "freeze %{_target}%"
     sound: "entity.experience_orb.pickup"
     errorsound: "block.anvil.place"
+
+# ╔───────────────────────────────────────────╗
+# │__        __               _             _ │
+# │\ \      / /_ _ _ __ _ __ (_)_ __   __ _| |│
+# │ \ \ /\ / / _` | '__| '_ \| | '_ \ / _` | |│
+# │  \ V  V / (_| | |  | | | | | | | | (_| |_|│
+# │   \_/\_/ \__,_|_|  |_| |_|_|_| |_|\__, (_)│
+# │                                   |___/   │
+# ╚───────────────────────────────────────────╝
+#The following is the code for the skript! Modifying this is required (Built In Configurator coming soon!) in some cases, however can break things realllyyyy quickly!
+#If you need help on configuring shoot me a DM on Discord (pbsi) ! 
+#Important things to note! The commands /punish[type] (I.E. /punishhacker) are required to make the GUIs work (fixing soon)!  
+#The punishment type set in functions must be kept the same for it to display in /punishments ! (You can change that yourself if you'd like ;) 
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+
 
 # ╔───────────────────────────────────────────────╗
 # │ _____                 _   _                 _ │
@@ -529,3 +543,19 @@ on chat:
         cancel event
         send "&cError &8|&c You are currently &4frozen&c!" to player
         
+# ╔───────────────────────────────────────────╗
+# │ _____ _           _   _             _ _ _ │
+# │|_   _| |__   __ _| |_( )___    __ _| | | |│
+# │  | | | '_ \ / _` | __|// __|  / _` | | | |│
+# │  | | | | | | (_| | |_  \__ \ | (_| | | |_|│
+# │  |_| |_| |_|\__,_|\__| |___/  \__,_|_|_(_)│
+# ╚───────────────────────────────────────────╝
+#Developed by PBSI, with help from LemonFrenzy! 
+#Redistribution of the free version is allowed and appreciated! 
+#For help contact me on Discord: pbsi
+#Inspirational Quotes:
+# "skript is trash" -DGBFounder
+# "He's right skript isn't that good" -Azex
+# "yeah skript seems useless to me" -Wally
+# "Skript is dogs**t" -Luis
+# "skript sucks anyway" -Srnyx
