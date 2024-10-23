@@ -7,7 +7,7 @@
 # ╚─────────────────────────────────────────────────────────────╝
 #Currently the Skript is designed to be used on Advanced Ban, if you would like it to work on other punishment plugins you'll need to configure it yourself!
 #IN DEVELOPMENT DO NOT USE ON SERVERS IF YOU'RE NOT WILLING TO FIX THE SKRIPT YOURSELF!
-#Version 0.8.48
+#Version 0.8.49
 options:
     actionbar: true #Set this to false to disable the action bar whilst in staff mode
     vanish: false #Change this to false if you are using a different vanish plugin and not our vanish addon !!This will disable the vanish toggle!!
@@ -43,7 +43,7 @@ options:
 # ╚───────────────────────────────────────────────╝
 
 
-function punishbugabuse(target: player, sender: player):
+function punishbugabuse(target: offline player, sender: player):
     add 1 to {punishments.%{_target}'s uuid%}
     set {_ap} to {punishments.%{_target}'s uuid%}
     set {punishments.%{_target}'s uuid%.type.%{_ap}%} to "BugAbuse"
@@ -60,7 +60,7 @@ function punishbugabuse(target: player, sender: player):
         broadcast "&c%{_target}'s name%&8 was banned for &cBug Abuse &8[&c&l3 Months&8]"
     send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
 
-function punishspam(target: player, sender: player):
+function punishspam(target: offline player, sender: player):
     add 1 to {punishments.%{_target}'s uuid%}
     set {_ap} to {punishments.%{_target}'s uuid%}
     set {punishments.%{_target}'s uuid%.type.%{_ap}%} to "Spam"
@@ -84,7 +84,7 @@ function punishspam(target: player, sender: player):
         stop
     send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
 
-function punishhacker(target: player, sender: player):
+function punishhacker(target: offline player, sender: player):
     add 1 to {punishments.%{_target}'s uuid%}
     set {_ap} to {punishments.%{_target}'s uuid%}
     set {punishments.%{_target}'s uuid%.type.%{_ap}%} to "Cheating"
@@ -101,7 +101,7 @@ function punishhacker(target: player, sender: player):
         broadcast "&c%{_target}'s name%&8 was banned for &cCheating &8[&c&lPERM&8]"
     send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
 
-function punishxrayer(target: player, sender: player):
+function punishxrayer(target: offline player, sender: player):
     add 1 to {punishments.%{_target}'s uuid%}
     set {_ap} to {punishments.%{_target}'s uuid%}
     set {punishments.%{_target}'s uuid%.type.%{_ap}%} to "Xray"
@@ -146,11 +146,7 @@ command punish <offlineplayer>:
         open {_pgui} to player
 
             
-command punishbugabuse <offlineplayer>:
-    permission: staff.member
-    trigger:
-        punishbugabuse(arg-1, player)
-        play sound {@sound} with volume 0.5 and pitch 2 at player 
+
 command lockaccount <offlineplayer>:
     permission: staff.member
     trigger:
@@ -177,20 +173,7 @@ command unlockaccount <offlineplayer>:
             send "&cError &8| &4%arg-1's name%'s&c account isn't locked!"
             play sound {@errorsound} with volume 2 and pitch 1 at player
 
-command spampunish <offlineplayer>:
-    permission: staff.member
-    trigger:
-        play sound {@sound} with volume 0.5 and pitch 2 at player 
-        punishspam(arg-1, player)
 
-command punishhacker <offlineplayer>:
-    permission: staff.member
-    trigger:
-        punishhacker(arg-1, player)
-command punishxrayer <offlineplayer>:
-    permission: staff.member
-    trigger:
-        punishxrayer(arg-1, player)
 command resetpunishments <offlineplayer>:
     permission: staff.admin
     trigger:
@@ -311,9 +294,9 @@ on connect:
 on inventory click:
     if name of event-inventory is "&cPunish Player":
         if index of event-slot = 10: 
-            execute player command "punishhacker %{punishedplayer.%player's uuid%}%"
+            punishhacker({punishedplayer.%player's uuid%} parsed as offline player, player)
         if index of event-slot = 12: 
-            execute player command "punishxrayer %{punishedplayer.%player's uuid%}%"
+            punishxrayer({punishedplayer.%player's uuid%} parsed as offline player, player)
         if index of event-slot = 14:
             set {_bagui} to a new chest inventory with 3 rows named "&c&lBug Abusing"
             set slot 11 of {_bagui} to a hopper named "&c&lDuping"
@@ -330,12 +313,12 @@ on inventory click:
         if index of event-slot = 11:
             execute player command "lockaccount %{punishedplayer.%player's uuid%}%"
         if index of event-slot = 13:
-            execute player command "punishBugAbuse %{punishedplayer.%player's uuid%}%"
+            punishbugabuse({punishedplayer.%player's uuid%} parsed as offline player, player)
         if index of event-slot = 15:
             execute player command "tempban %{punishedplayer.%player's uuid%}% 1h Failure to report bugs."
     if name of event-inventory is "&c&lChat Abuse":
         if index of event-slot = 11:
-            execute player command "spampunish %{punishedplayer.%player's uuid%}%"
+            punishspam({punishedplayer.%player's uuid%} parsed as offline player, player)
         if index of event-slot = 13:
             execute player command "mute %{punishedplayer.%player's uuid%}% Racism/Discrimination"
             execute player command "tempban -s %{punishedplayer.%player's uuid%}% 1h Racism/Discrimination"
