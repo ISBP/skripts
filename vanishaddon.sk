@@ -1,32 +1,26 @@
-options:
-    jme: true #Enable custom join & leave messages (To hide when a staff member joins & leaves the game)
-    joinmessage: "&e%player's name% joined the game!" #Set the custom join message for non staff members
-    leavemessage: "&e%player's name% left the game!" #Set the custom leave message for non staff members
 #Vanish skript for staff tools (Addon)!
 command vanish:
     permission: staff.member
     trigger:
-        if {vanished::*} doesn't contain player's uuid:
+        if {vanish.%player's uuid%} is not true:
             loop all players:
                 if loop-player has permission "staff.member":
-                    send "&3%player's name%&b vanished!" to loop-player
+                    send "&bVanish &8| &3%player's name%&b vanished!" to loop-player
                     reveal player to loop-player
-                    add player's uuid to {vanished::*}   
+                    set {vanish.%player's uuid%} to true   
         else:
             loop all players:
                 if loop-player has permission "staff.member":
-                    send "&3%player's name%&b unvanished!" to loop-player
+                    send "&bVanish &8| &3%player's name%&b unvanished!" to loop-player
             reveal player to all players
-            remove player's uuid from {vanished::*}
+            set {vanish.%player's uuid%} to false
 on join:
-    if {@jme} is true:
-        if {vanished::*} contains player's uuid:
-            set join message to ""
-        else:
-            set join message to {@joinmessage}
+    if {vanish.%player's uuid%} is true:
+        set join message to ""
+        loop all players:
+            if loop-player has permission "staff.member":
+                reveal player to loop-player
+                send "&bJoin &8| &b%player's name% &3joined&b whilst vanished!" to loop-player
 on leave:
-    if {@jme} is true:
-        if {vanished::*} contains player's uuid:
-            set leave message to ""
-        else:
-            set leave message to {@leavemessage}
+    if {vanish.%player's uuid%} is true:
+        set leave message to "" 

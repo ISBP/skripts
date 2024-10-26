@@ -10,7 +10,7 @@
 #Version 0.8.49
 options:
     actionbar: true #Set this to false to disable the action bar whilst in staff mode
-    vanish: false #Change this to false if you are using a different vanish plugin and not our vanish addon !!This will disable the vanish toggle!!
+    vanish: false #Enable this if using our vanish addon! Otherwise the command labeled "vanishcommand" will be used :D 
     pvp: false #Whether to allow pvp whilst in staff mode
     vanishcommand: "vanish" #Set this to your vanish command if not using our vanish addon!
     freezecommand: "freeze %{_target}%"
@@ -211,7 +211,7 @@ command staffmode:
             set slot 0 of player's inventory to a diamond axe named "&c&lBan Hammer" with lore "&7Right click on a player to punish them!"
             add player's uuid to {staffmode::*}
             if {@vanish} is true:
-                if {vanished::*} doesn't contain player's uuid:
+                if {vanish.%player's uuid%} is not true:
                     execute player command "vanish"
                 set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
             else:
@@ -411,19 +411,19 @@ on right click with light green dye:
         if player has permission "staff.member":
             reveal player to all players
             set slot 8 of player's inventory to a gray dye named "&a&lVanish" with lore "&7Status: &cDisabled"
-            remove player's uuid from {vanished::*}
+            set {vanish.%player's uuid%} to false
             loop all players:
                 if loop-player has permission "staff.member":
-                    send "&3%player's name%&b unvanished!" to loop-player
+                    send "&bVanish &8| &3%player's name%&b unvanished!" to loop-player
 on right click with gray dye:
     if name of player's tool is "&a&lVanish":
         if player has permission "staff.member":
             hide player from all players
             set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
-            add player's uuid to {vanished::*}
+            set {vanish.%player's uuid%} to true
             loop all players:
                 if loop-player has permission "staff.member":
-                    send "&3%player's name%&b vanished!" to loop-player
+                    send "&bVanish &8| &3%player's name%&b vanished!" to loop-player
                     reveal player to loop-player
 on right click with potion of invisibility:
     if name of player's tool is "&f&lVanish":
@@ -439,8 +439,10 @@ on join:
         set slot 1 of player's inventory to a ice named "&b&lFreeze Player" with lore "&7Left Click on a player to freeze them"
         set slot 0 of player's inventory to a diamond axe named "&c&lBan Hammer" with lore "&7Left click on a player to punish them!"
         if {@vanish} is true:
-            if {vanished::*} doesn't contain player's uuid:
+            if {vanish.%player's uuid%} is not true:
                 execute player command "vanish"
+                if {vanish.%player's uuid%} is not true:
+                    send "&CFailed &8|&c Failed to enable your &4Vanish&c! &cThis was likely due to the skript addon not being installed!" to player
             set slot 8 of player's inventory to a light green dye named "&a&lVanish" with lore "&7Status: &aEnabled"
         else:
             set slot 8 of player's inventory to a potion of invisibility named "&f&lVanish" with lore "&3Right click&b to use!"        
@@ -477,7 +479,7 @@ on chat:
 on join:
     if {@actionbar} is true:
         while player is online:
-            if {vanished::*} contains player's uuid:
+            if {vanish.%player's uuid%} contains player's uuid:
                 set {_vanished} to "Enabled"
                 wait 5 ticks
             else:
