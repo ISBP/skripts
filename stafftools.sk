@@ -430,24 +430,6 @@ on right click with potion of invisibility:
         if player has permission "staff.member":
             execute player command "vanish"
             cancel event
-on join:
-    if player doesn't have permission "staff.member":
-        loop all players:
-            if {vanished::*} contains loop-player's uuid:
-                hide loop-player from player
-    if {vanished::*} contains player's uuid:
-        set join message to ""
-        hide player from all players
-        loop all players:
-            if loop-player has permission "staff.member":
-                send "&3%player's name%&b joined silently!"
-                reveal player to loop-player
-on leave:
-    if {vanished::*} contains player's uuid:
-        loop all players:
-            if loop-player has permission "staff.member":
-                send "&3%player's name%&b left silently!"
-        set leave message to ""
 
 on join:
     if {staffmode::*} contains player's uuid:
