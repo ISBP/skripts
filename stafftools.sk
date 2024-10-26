@@ -478,7 +478,7 @@ on chat:
 on join:
     if {@actionbar} is true:
         while player is online:
-            if {vanish.%player's uuid%} contains player's uuid:
+            if {vanish.%player's uuid%} is true:
                 set {_vanished} to "Enabled"
                 wait 5 ticks
             else:
