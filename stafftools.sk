@@ -220,7 +220,7 @@ command staffmode:
             clear player's inventory
             remove player's uuid from {staffmode::*}
             if {@actionbar} is true:
-                send actionbar "&3Ping: &b%player's ping% &8| &3Vanished:&b True &8| &3Staffmode: &bDisabled" to player
+                send actionbar "" to player
 
 command filter <text> [<text>]: #Todo: Make filter GUI! :D
     permission: staff.admin
