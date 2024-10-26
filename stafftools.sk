@@ -27,7 +27,6 @@ options:
 # ╚───────────────────────────────────────────╝
 #The following is the code for the skript! Modifying this is required (Built In Configurator coming soon!) in some cases, however can break things realllyyyy quickly!
 #If you need help on configuring shoot me a DM on Discord (pbsi) ! 
-#Important things to note! The commands /punish[type] (I.E. /punishhacker) are required to make the GUIs work (fixing soon)!  
 #The punishment type set in functions must be kept the same for it to display in /punishments ! (You can change that yourself if you'd like ;) 
 
 
