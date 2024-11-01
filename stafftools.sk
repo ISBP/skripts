@@ -50,13 +50,13 @@ function punishbugabuse(target: offline player, sender: player):
     set {punishments.%{_target}'s uuid%.date.%{_ap}%} to now
     if {punishments.%{_target}'s uuid%} is 1:
         execute console command "tempban -s %{_target}'s name% 1w Bug Abuse"
-        broadcast "&c%{_target}'s name%&8 was banned for &cBug Abuse &8[&c&l7 DAYS&8]"
+        #broadcast "&c%{_target}'s name%&8 was banned for &cBug Abuse &8[&c&l7 DAYS&8]"
     if {punishments.%{_target}'s uuid%} is 2:
         execute console command "tempban -s %{_target}'s name% 1mo Bug Abuse"
-        broadcast "&c%{_target}'s name%&8 was banned for &cBug Abuse &8[&c&l30 DAYS&8]"
+        #broadcast "&c%{_target}'s name%&8 was banned for &cBug Abuse &8[&c&l30 DAYS&8]"
     if {punishments.%{_target}'s uuid%} is greater than 2:
         execute console command "tempban -s %{_target}'s name% 3mo Bug Abuse"
-        broadcast "&c%{_target}'s name%&8 was banned for &cBug Abuse &8[&c&l3 Months&8]"
+        #broadcast "&c%{_target}'s name%&8 was banned for &cBug Abuse &8[&c&l3 Months&8]"
     send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
 
 function punishspam(target: offline player, sender: player):
@@ -67,19 +67,19 @@ function punishspam(target: offline player, sender: player):
     set {punishments.%{_target}'s uuid%.date.%{_ap}%} to now
     if {punishments.%{_target}'s uuid%} is 1:
         execute console command "tempmute -s %{_target}'s name% 1h Spam"
-        broadcast "&c%{_target}'s name%&8 was muted for &cSpam &8[&c&l1 HOUR&8]"
+        #broadcast "&c%{_target}'s name%&8 was muted for &cSpam &8[&c&l1 HOUR&8]"
         stop
     if {punishments.%{_target}'s uuid%} is 2:
         execute console command "tempmute -s %{_target}'s name% 12h Spam"
-        broadcast "&c%{_target}'s name%&8 was muted for &cSpam &8[&c&l12 HOURS&8]"
+        #broadcast "&c%{_target}'s name%&8 was muted for &cSpam &8[&c&l12 HOURS&8]"
         stop
     if {punishments.%{_target}'s uuid%} is 3:
         execute console command "tempmute -s %{_target}'s name% 3d Spam"
-        broadcast "&c%{_target}'s name%&8 was muted for &cSpam &8[&c&l3 DAYS&8]"
+        #broadcast "&c%{_target}'s name%&8 was muted for &cSpam &8[&c&l3 DAYS&8]"
         stop
     else:
         execute console command "tempmute -s %{_target}'s name% 7d Spam"
-        broadcast "&c%{_target}'s name%&8 was muted for &cSpam &8[&c&l7 DAYS&8]"
+        #broadcast "&c%{_target}'s name%&8 was muted for &cSpam &8[&c&l7 DAYS&8]"
         stop
     send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
 
@@ -91,13 +91,13 @@ function punishhacker(target: offline player, sender: player):
     set {punishments.%{_target}'s uuid%.date.%{_ap}%} to now
     if {punishments.%{_target}'s uuid%} is 1:
         execute console command "tempban -s %{_target}'s name% 1mo Cheating"
-        broadcast "&c%{_target}'s name%&8 was banned for &cCheating &8[&c&l60 DAYS&8]"
+        #broadcast "&c%{_target}'s name%&8 was banned for &cCheating &8[&c&l60 DAYS&8]"
     if {punishments.%{_target}'s uuid%} is 2:
         execute console command "tempban -s %{_target}'s name% 3mo Cheating"
-        broadcast "&c%{_target}'s name%&8 was banned for &cCheating &8[&c&l90 DAYS&8]"
+        #broadcast "&c%{_target}'s name%&8 was banned for &cCheating &8[&c&l90 DAYS&8]"
     if {punishments.%{_target}'s uuid%} is greater than 2:
         execute console command "ban -s %{_target}'s name% Cheating"
-        broadcast "&c%{_target}'s name%&8 was banned for &cCheating &8[&c&lPERM&8]"
+        #broadcast "&c%{_target}'s name%&8 was banned for &cCheating &8[&c&lPERM&8]"
     send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
 
 function punishxrayer(target: offline player, sender: player):
@@ -108,19 +108,19 @@ function punishxrayer(target: offline player, sender: player):
     set {punishments.%{_target}'s uuid%.date.%{_ap}%} to now
     if {punishments.%{_target}'s uuid%} is 1:
         execute console command "tempban -s %{_target}'s name% 15d X-Ray"
-        broadcast "&c%{_target}'s name%&8 was banned for &cX-Ray &8[&c&l15 DAYS&8]"
+        #broadcast "&c%{_target}'s name%&8 was banned for &cX-Ray &8[&c&l15 DAYS&8]"
         stop
     if {punishments.%{_target}'s uuid%} is 2:
         execute console command "tempban -s %{_target}'s name% 1mo X-Ray"
-        broadcast "&c%{_target}'s name%&8 was banned for &cX-Ray &8[&c&l30 DAYS&8]"
+        #broadcast "&c%{_target}'s name%&8 was banned for &cX-Ray &8[&c&l30 DAYS&8]"
         stop
     if {punishments.%{_target}'s uuid%} is greater than 2:
         execute console command "tempban %{_target}'s name% 90d X-Ray"
-        broadcast "&c%{_target}'s name%&8 was banned for &cX-Ray &8[&c&l90 DAYS&8]"
+        #broadcast "&c%{_target}'s name%&8 was banned for &cX-Ray &8[&c&l90 DAYS&8]"
         stop
     else:
         execute console command "ban -s %{_target}'s name% X-Ray"
-        broadcast "&c%{_target}'s name%&8 was banned for &cX-Ray &8[&c&lPERM&8]"
+        #broadcast "&c%{_target}'s name%&8 was banned for &cX-Ray &8[&c&lPERM&8]"
     send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
 
 
