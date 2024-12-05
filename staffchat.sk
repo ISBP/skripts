@@ -11,7 +11,7 @@ on chat:
 				loop all players:
 					replace {@prefix} in message with ""
 					if loop-player has permission "staff.chat":
-						if {scd::*} doesn't contain loop-player's uuid:
+						if {scd.%loop-player's uuid%} is not true:
 							send "&b&l[S]&r&3 [%{@name}%]&r &4%player%&r&7:&b %message%" to loop-player
 				if {scd::*} contains player's uuid:
 					send "&cWarn &8| &cYou have staff chat &4disabled&c however your message was still sent!"
@@ -22,12 +22,12 @@ on chat:
 command togglestaffchat:
 	permission: staff.chat
 	trigger:
-		if {scd::*} doesn't contain player's uuid:
+		if {scd.%player's uuid%} is not true:
 			send "&cDisabled &8| &cDisabled your &4staff chat&c!"
-			add player's uuid to {scd::*}
+			set {scd.%player's uuid%} to true
 		else:
 			send "&aEnabled &8| &aEnabled your &2staff chat&a!"
-			remove player's uuid from {scd::*}
+			set {scd.%player's uuid%} to false
 command staffchat <text>:
 	permission: staff.chat
 	aliases: /sc
