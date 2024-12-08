@@ -1,0 +1,118 @@
+##Unfinished!
+
+options:
+    auth: "Change Me!"
+    port: 25570
+    link: "https://link.com"
+    mode: 2
+function link(player: offline player):
+    set {verified.%{_player}'s uuid%} to true
+    if {_player} is online:
+        send "&2Success &8| &aSuccessfully&2 linked your account!" to {_player}
+## Add your commands here :D 
+##Replace player with {_player} since it's a function. If you're confused read the skript docs on functions :3
+
+
+on load:
+    #if {@auth} is "Change Me!":
+    #    send "&cSevere Error &8| &4You MUST&c change the secret code in the skript file!"
+    #    wait 3 seconds
+    #    execute console command "skript disable %name of script%"
+    set {auth} to {@auth} #Must be in body of every request :3
+    set {server} to new http server with port {@port}
+    make endpoint using {server}:
+        method: "POST" #This is a POST request!!
+        path: "code" #Access this by making a POST request with the body that contains {auth} followed by the path. Example: localhost:25700/code/usernameofplayer 
+        trigger: 
+            set {_name} to (first element of (full path of the exchange split at "/"))
+            set {_json} to new json object
+            set {_body} to a new json object
+            set {_body} to body of event-httpexchange
+            set {_bj} to key "auth" from {_body}
+            broadcast {_body}
+            broadcast {_bj}
+            if {_name} is empty:
+                put "message" and "No player name set" in {_json} 
+                respond with code 400 and message {_json}
+            else:
+                if {passed} is true:
+                    set {_player} to ({_name} parsed as offline player)
+                    put "code" and {code.%{_player}'s uuid%} in {_json}
+                    respond with code 200 and message {_json} #If it was successful then you'll recieve a 200 message with the code  ^_^
+                else:
+                    put "Error" and "Unauthorized" in {_json} 
+                    respond with code 401 and message {_json}
+    make endpoint using {server}:
+        method: "POST"
+        path: "verify" #Example: locahost:25700/verify/usernameofplayer
+        trigger:
+            set {_name} to (first element of (full path of the exchange split at "/"))
+            set {_json} to new json object
+            set {_body} to body of event-httpexchange
+            if {_name} is empty:
+                put "message" and "No player name set" in {_json}
+                respond with code 400 and message {_json}
+            else:
+                set {bd} to {_body}
+                if {_body} contains {auth}:
+                    set {_player} to ({_name} parsed as offline player)
+                    link({_player})
+                    put "message" and "Verified" in {_json}
+                    respond with code 200 and message {_json}
+                else:
+                    put "Error" and "Unauthorized" in {_json}
+                    respond with code 401 and message {_json}
+    make endpoint using {server}:
+        method: "DELETE"
+        path: "unverify" 
+        trigger:
+            set {_name} to (first element of (full path of the exchange split at "/"))
+            set {_json} to new json object
+            set {_body} to body of event-httpexchange
+            if {_name} is empty:
+                put "message" and "No player name set" in {_json}
+                respond with code 400 and message {_json}
+            else:
+                if {_body} contains {auth}:
+                    set {_player} to ({_name} parsed as offline player)
+                    set {verified.%{_player}'s uuid%} to false
+                    respond with code 200 and message {_json}
+                    put "message" and "Unverified" in {_json}
+                else:
+                    put "Error" and "Unauthorized" in {_json}
+                    respond with code 401 and message {_json}
+
+    start http {server}
+ 
+on unload:
+    stop http {server}
+    delete {server}
+on connect:
+    if {code.%player's uuid%} is not set:
+        set {_loops} to 0
+        set {code.%player's uuid%} to "%a random integers between 0 and 9%%a random integers between 0 and 9%%a random integers between 0 and 9%%a random integers between 0 and 9%%a random integers between 0 and 9%%a random integers between 0 and 9%" parsed as a number
+on join:
+    if {verified.%player's uuid%} is not true:
+        if {@mode} is 1:
+            wait 5 ticks
+            send "&4&lPlease Link your Account:%nl%&r&cTo link your account visit &l%{@link}%&r&c %nl%and type /link code: %{code.%player's uuid%}% username: %player's name% !"
+            send "&cWarn &8| &cYou are required to link your account!"
+        if {@mode} is 2:
+            send "&4&lPlease Link your Account:%nl%&r&cTo link your account visit &l%{@link}%&r&c %nl%and type /link code: %{code.%player's uuid%}% username: %player's name% !"
+on player walk:
+    if {verified.%player's uuid%} is not true:
+        if {@mode} is 1:
+            cancel event
+            send title "&cPlease link your account!" to player for 1 second
+on chat:
+    if {verified.%player's uuid%} is not true:
+        if {@mode} is 1:
+            cancel event
+
+
+command link:
+    trigger:
+        if {verified.%player's uuid%} is not true:
+            send "&4&lPlease Link your Account:%nl%&r&cTo link your account visit &l%{@link}%&r&c %nl%and type /link code: %{code.%player's uuid%}% username: %player's name% !"
+        else:
+            send "&cError &8| &cYou are already verified!"
