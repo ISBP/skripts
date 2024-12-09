@@ -28,9 +28,7 @@ on load:
             set {_json} to new json object
             set {_body} to a new json object
             set {_body} to body of event-httpexchange
-            set {_bj} to key "auth" from {_body}
-            broadcast {_body}
-            broadcast {_bj}
+
             if {_name} is empty:
                 put "message" and "No player name set" in {_json} 
                 respond with code 400 and message {_json}
