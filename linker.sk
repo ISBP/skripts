@@ -57,6 +57,10 @@ on load:
                 if {_body} contains {auth}:
                     set {_player} to ({_name} parsed as offline player)
                     link({_player})
+                    set {_dsc} to {_body}
+                    replace "%{auth}%" with "" in {_dsc}
+                    if {_dsc} is set:
+                        set {discord.%{_player}'s uuid%} to {_dsc}
                     put "message" and "Verified" in {_json}
                     respond with code 200 and message {_json}
                 else:
