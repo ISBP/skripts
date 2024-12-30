@@ -277,7 +277,7 @@ command freeze <player>:
             else:
                 send "&cAlert &8|&c You have been &4unfrozen&c!" to arg-1
                 set {freeze.%arg-1's uuid%} to false
-                send "&2Success &8| &2Successfully unfroze &a%arg-1's uuid%&2!" to player
+                send "&2Success &8| &2Successfully unfroze &a%arg-1's name%&2!" to player
         else:
             send "&eWarn &8|&e The target player has is a &6staff member&e!" to player
             play sound {@errorsound} with volume 1 and pitch 1 at player
