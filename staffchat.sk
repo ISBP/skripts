@@ -1,6 +1,9 @@
+#If you are getting an error regarding player's prefix, you can either remove it if you don't have ranks
+#or install vault and a rank granting plugin, such as luckperms.
+
 options:
 	prefix: "$"
-	name: "Event"
+	name: "Event" #This will be displayed in every message, it's a bit useless, but I kinda like it 
 on chat:
 	if first character of message = {@prefix}:
 		if player has permission "staff.chat":
@@ -12,7 +15,24 @@ on chat:
 					replace {@prefix} in message with ""
 					if loop-player has permission "staff.chat":
 						if {scd.%loop-player's uuid%} is not true:
-							send "&b&l[S]&r&3 [%{@name}%]&r &4%player%&r&7:&b %message%" to loop-player
+							send "&b&l[S]&r&3 [%{@name}%]&r %player's prefix%%player%&r&7:&b %message%" to loop-player
+				if {scd::*} contains player's uuid:
+					send "&cWarn &8| &cYou have staff chat &4disabled&c however your message was still sent!"
+			else:
+				cancel event
+				send "&cError &8| &cYour message is &4Undefined&c!"
+on chat:
+	if {autosc.%player's uuid%} is true:
+		if player has permission "staff.chat":
+			set {_sc} to message
+			replace {@prefix} in {_sc} with ""
+			if {_sc} is not "":
+				cancel event
+				loop all players:
+					replace {@prefix} in message with ""
+					if loop-player has permission "staff.chat":
+						if {scd.%loop-player's uuid%} is not true:
+							send "&b&l[S]&r&3 [%{@name}%]&r %player's prefix%%player%&r&7:&b %message%" to loop-player
 				if {scd::*} contains player's uuid:
 					send "&cWarn &8| &cYou have staff chat &4disabled&c however your message was still sent!"
 			else:
@@ -20,6 +40,7 @@ on chat:
 				send "&cError &8| &cYour message is &4Undefined&c!"
 
 command togglestaffchat:
+	aliases: tsc
 	permission: staff.chat
 	trigger:
 		if {scd.%player's uuid%} is not true:
@@ -38,3 +59,13 @@ command staffchat <text>:
 					send "&b&l[S]&r&3 [%{@name}%]&r &4%player%&r&7:&b %arg-1%" to loop-player
 			if {scd::*} contains player's uuid:
 				send "&cWarn &8| &cYou have staff chat &4disabled&c however your message was still sent!"
+command autostaffchat:
+	permission: staff.chat
+	aliases: autosc, asc
+	trigger:	
+		if {autosc.%player's uuid%} is true:
+			send "&cDisabled &8| &cDisabed your &4auto staff chat&c!"
+			set {autosc.%player's uuid%} to false
+		else:
+			send "&aEnabled &8| &aEnabled your &2auto staff chat&a!"
+			set {autosc.%player's uuid%} to true
