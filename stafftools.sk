@@ -51,15 +51,15 @@ function punishbugabuse(target: offline player, sender: player):
     if {punishments.%{_target}'s uuid%} is 1:
         if {ba.p1} is not set:
             set {ba.p1} to "tempban %{_target}'s name% 1w Bug Abuse"
-        execute console command {ba.p1}
+        execute {_sender} command {ba.p1}
     if {punishments.%{_target}'s uuid%} is 2:
         if {ba.p2} is not set:
             set {ba.p2} to "tempban %{_target}'s name% 1mo Bug Abuse"
-        execute console command {ba.p2}
+        execute {_sender} command {ba.p2}
     if {punishments.%{_target}'s uuid%} is greater than 2:
         if {ba.p3} is not set:
             set {ba.p3} to "tempban %{_target}'s name% 3mo Bug Abuse"
-        execute console command {ba.p3}
+        execute {_sender} command {ba.p3}
     send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
 
 function punishspam(target: offline player, sender: player):
@@ -71,17 +71,17 @@ function punishspam(target: offline player, sender: player):
     if {punishments.%{_target}'s uuid%} is 1:
         if {ps.1} is not set:
             set {ps.1} to "tempmute %{_target}'s name% 1h Spam"
-        execute console command {ps.1}
+        execute {_sender} command {ps.1}
         stop
     if {punishments.%{_target}'s uuid%} is 2:
         if {ps.2} is not set:
             set {ps.2} to "tempmute %{_target}'s name% 12h Spam"
-        execute console command {ps.2}
+        execute {_sender} command {ps.2}
         stop
     if {punishments.%{_target}'s uuid%} is greater than 2:
         if {ps.3} is not set:
             set {ps.3} to "tempmute %{_target}'s name% 1d Spam"
-        execute console command {ps.3}
+        execute {_sender} command {ps.3}
 
     send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
 
@@ -94,15 +94,15 @@ function punishhacker(target: offline player, sender: player):
     if {punishments.%{_target}'s uuid%} is 1:
         if {ph.1} is not set:
             set {ph.1} to "tempban %{_target}'s name% 1mo Cheating"
-        execute console command {ph.1}
+        execute {_sender} command {ph.1}
     if {punishments.%{_target}'s uuid%} is 2:
         if {ph.2} is not set:
             set {ph.2} to "tempban %{_target}'s name% 3mo Cheating"
-        execute console command {ph.2}
+        execute {_sender} command {ph.2}
     if {punishments.%{_target}'s uuid%} is greater than 2:
         if {ph.3} is not set:
             set {ph.3} to "ban %{_target}'s name% Cheating"
-        execute console command {ph.3}
+        execute {_sender} command {ph.3}
     send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
 
 function punishxrayer(target: offline player, sender: player):
@@ -114,17 +114,17 @@ function punishxrayer(target: offline player, sender: player):
     if {punishments.%{_target}'s uuid%} is 1:
         if {px.1} is not set:
             set {px.1} to "tempban %{_target}'s name% 15d X-Ray"
-        execute console command {px.1}
+        execute {_sender} command {px.1}
         stop
     if {punishments.%{_target}'s uuid%} is 2:
         if {px.2} is not set:
             set {px.2} to "tempban %{_target}'s name% 1mo X-Ray"
-        execute console command {px.2}
+        execute {_sender} command {px.2}
         stop
     if {punishments.%{_target}'s uuid%} is greater than 2:
         if {px.3} is not set:
             set {px.3} to "tempban %{_target}'s name% 3mo X-Ray"
-        execute console command {px.3}
+        execute {_sender} command {px.3}
         stop
 
 
