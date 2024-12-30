@@ -406,8 +406,8 @@ on right click with ice:
                         delete {cooldown.%player's name%}
 
 on damage:
-    name of attacker's tool is "&b&lFreeze Player":
-    player has permission "staff.member"
+    name of attacker's tool is "&b&lFreeze Player"
+    attacker has permission "staff.member"
     cancel event
     set {_target} to victim's name
     execute attacker command {@freezecommand}
