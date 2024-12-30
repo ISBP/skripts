@@ -78,15 +78,11 @@ function punishspam(target: offline player, sender: player):
             set {ps.2} to "tempmute %{_target}'s name% 12h Spam"
         execute console command {ps.2}
         stop
-    if {punishments.%{_target}'s uuid%} is 3:
+    if {punishments.%{_target}'s uuid%} is greater than 2:
         if {ps.3} is not set:
             set {ps.3} to "tempmute %{_target}'s name% 1d Spam"
         execute console command {ps.3}
-    else:
-        if {ps.4} is not set:
-            set {ps.4} to "tempmute %{_target}'s name% 7d Spam"
-        execute console command {ps.4}
-        stop
+
     send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
 
 function punishhacker(target: offline player, sender: player):
@@ -130,11 +126,7 @@ function punishxrayer(target: offline player, sender: player):
             set {px.3} to "tempban %{_target}'s name% 3mo X-Ray"
         execute console command {px.3}
         stop
-    else:
-        if {px.4} is not set:
-            set {px.4} to "ban %{_target}'s name% X-Ray"
-        execute console command {px.4}
-    send "&cPunish &8| &cSuccessfully punished &4%{_target}'s name%&c!" to {_sender}
+
 
 
 # ╔────────────────────────────────────────────────────────╗
