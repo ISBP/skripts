@@ -1,0 +1,228 @@
+options:
+    command: "lp user %player's name% meta setsuffix 1 ""%{_name}% "" "
+    special1: 19 and 20 #Gives certain items special subtext
+    sp1text: "&cNon-Purchasable"
+    special2: 21 and 22
+    sp2text: "&cNo Longer Obtainable"
+    defaultmessage: "&cYou can purchase this tag &4&l<link:https://store.website.pro>HERE&r&c!" #Default message to be sent if a user doesn't own a tag
+    exclude: 21 and 22 #Tags that are exempt from this
+    clear: "lp user %player's name% meta clear" #Clears a player's tag, will happen when a player sets their tag aswell. If a player has multiple cosmetics, you can unset the number of the one you set.
+function tags(p: player):
+    set {_gui} to chest inventory with 5 rows named "Tags"
+    set {_int} to 0
+    loop {int.tags}  times:
+        if {_p} has permission "tag.%{_int}%":
+            set {_ownstag} to "&aYou own this tag!"
+        else:
+            set {_ownstag} to "&cYou don't own this tag!" 
+        if {@special1} contains {_int}:
+            set {_special} to {@sp1text}
+        if {@special2} contains {_int}:
+            set {_special} to {@sp2text}
+        set slot {_int} of {_gui} to a name tag named formatted {nametag.%{_int}%} with lore {_ownstag} and {_special} and "%nl%&7ID: %{_int}%"
+        delete {_special}
+        add 1 to {_int}
+    set slot 44 of {_gui} to a barrier named "&cClear tags!"
+    if {_p} has permission "tag.custom":
+        set {_ownstag} to "&aYou own this!"
+    else:
+        set {_ownstag} to "&cYou don't own this!"
+    set slot 43 of {_gui} to a paper named "&f&lCustom Tag!" with lore {_ownstag}
+    open {_gui} to {_p}
+
+on inventory click:
+    name of event-inventory is "Tags"
+    if event-item is a paper:
+        player has permission "tag.custom"
+        if {customtag::%player's uuid%} is set:
+            if {customtag::color::%player's uuid%} is not set:
+                set {customtag::color::%player's uuid%} to raw "&f"
+            set {_ctag} to raw "&l%raw {customtag::color::%player's uuid%}%&l%raw {customtag::%player's uuid%}%"
+            execute console command {@command}
+            close player's inventory
+            cancel event
+            stop
+        else:
+            send "&cYou must make a custom tag first!&7/customtag"  
+    if event-item is a barrier:
+        execute console command {@clear}
+        send "&aCleared your tag!"
+        cancel event
+        close player's inventory
+        stop
+    if event-item is not set:
+        stop
+    if player has permission "tag.%index of event-slot%":
+        if {nametag.%index of event-slot%} is not set:
+            send "&cThis tag does not exist!"
+            close player's inventory
+            stop
+        execute console command {@clear}
+        set {_name} to {nametag.%index of event-slot%}
+        execute console command {@command}
+        send "&aYou selected tag %formatted {_name}%&a!"
+        close player's inventory
+    else:
+        send "&cYou don't own that tag!" to player
+        close player's inventory
+        {@exclude} does not contain index of event-slot:
+            send {@defaultmessage}
+    cancel event
+    event-inventory is not player's inventory
+
+command tag <text> <text> [<offline player>]:
+    permission: staff
+    trigger:
+        player is a player
+        if arg-1 is "create":
+            if {int.tags} is not set:
+                set {int.tags} to 0
+            set {nametag.%{int.tags}%} to arg-2
+            send "&aCreated tag %formatted arg-2% &awith id &b%{int.tags}%" to player
+            add 1 to {int.tags}
+            set {_name} to arg-3
+            set {_name} to {_name} parsed as player's name
+
+        if arg-1 is "revoke":
+            if arg-2 parsed as number is greater than {int.tags}:
+                send "&cError &8|&c The tag you tried to revoke &4does not exist&c!"
+                stop
+            execute console command "lp user %arg-3's name% permission unset tag.%arg-2%"
+            send "&cRevoked tag from %arg-3's name%"
+        if arg-1 is "delete":
+            if arg-2 parsed as number is greater than {int.tags}:
+                send "&cError &8|&c The tag you tried to grant &4does not exist&c!"
+                stop
+            set {_ttag} to {nametag.%arg-2%}
+            delete {nametag.%arg-2%}
+            loop {int.tags} times:
+                add 1 to {_int}
+                set {_stint} to {_int}
+                {_int} > arg-2 parsed as number
+                subtract 1 from {_stint}
+                set {nametag.%{_stint}%} to {nametag.%{_int}%}
+            subtract 1 from {int.tags}
+            send "&aDeleted&b %{_ttag}%"
+
+           
+command tags:        
+    trigger:
+        tags(player)
+on chat:
+    if player has permission "chat.format":
+        if player does not have permission "chat.format.staff":
+            set {_raw.message} to raw message #Chat sanitization for non staff members
+            replace raw "&l", raw "&o", raw "&n", raw "&m", raw "&k" and raw "&o" with "" in {_raw.message}
+            set message to {_raw.message}
+        set the chat format to "%player's suffix%%player's prefix%%player's name%&7:&f %formatted message%"
+
+    else:
+        set the chat format to "%player's suffix%%player's prefix%%player's name%&7:&f %message%"
+
+
+
+on tab complete of "/tag":
+    add 0 to {_tags::*}
+    loop {int.tags} times:
+        add 1 to {_int}
+        add {_int} to {_tags::*}
+    set tab completion for position 1 to "grant", "revoke" and "create" and "delete"
+    set tab completion for position 2 to {_tags::*}
+
+
+
+
+command customtag:
+    permission: tag.custom
+    trigger:
+        open real anvil inventory to player #named "&b&lChoose your tag!" to player
+        set slot 0 of player's current inventory to paper named "Rename me!"
+on inventory click:
+    type of event-inventory is anvil inventory
+    slot 0 of event-inventory is a paper named "Rename me!"
+    set anvil repair cost to 0
+    if player's inventory contains a paper named "Rename me!":
+        remove a paper named "Rename me!" from player's inventory
+    set {_sanitization} to the anvil text input of the event-inventory
+    cancel event
+    if length of {_sanitization} > 10:
+        send actionbar "&cTo long &7%length of {_sanitization}%/10 "
+        close player's inventory
+        cancel event
+        wait 1 tick
+        if player's inventory contains a paper named "Rename me!":
+            remove a paper named "Rename me!" from player's inventory
+            stop
+    if {filter::*} contains {_sanitization}:
+        send actionbar "&cContains disallowed words!"
+        close player's inventory
+        cancel event
+        wait 1 tick
+        if player's inventory contains a paper named "Rename me!":
+            remove a paper named "Rename me!" from player's inventory
+        stop
+
+    replace " " with "" in {_sanitization}
+    if {_sanitization} is not alphanumeric:
+        send actionbar "&cInvalid Characters!"
+        close player's inventory
+        cancel event
+        wait 1 tick
+        if player's inventory contains a paper named "Rename me!":
+            remove a paper named "Rename me!" from player's inventory
+        stop
+    
+    set {customtag::%player's uuid%} to the anvil text input of the event-inventory
+    close player's inventory
+    pickcolor(player)
+    send "&aYou have edited your tag!" to player
+    if player's inventory contains a paper named "Rename me!":
+        remove a paper named "Rename me!" from player's inventory
+command grantcustomtag <offline player>:
+    permission: staff.admin
+    trigger:
+        execute console command "lp user %arg-1's name% permission set tag.custom true"
+        broadcast "&3&l%arg-1's name%&b&l Has purchased custom tags!"
+
+
+function pickcolor(p: player):
+    set {_color} to a new chest inventory with 1 row named "&b&lPick your color!"
+    set slot 0 of {_color} to gray wool named "&7&lGray"
+    set slot 1 of {_color} to blue wool named "&1&lBlue"
+    set slot 2 of {_color} to orange wool named "&c&lLight Red"
+    set slot 3 of {_color} to lime wool named "&a&lLime"
+    set slot 4 of {_color} to purple wool named "&5&lPurple"
+    set slot 5 of {_color} to light blue wool named "&b&lLight Blue"
+    set slot 6 of {_color} to pink wool named "&d&lPink"
+    set slot 7 of {_color} to red wool named "&4&lDark Red"
+    set slot 8 of {_color} to black wool named "&0&lBlack"
+    open {_color} to {_p}
+
+on inventory click:
+    name of event-inventory is "&b&lPick your color!"
+    if event-slot is 0:
+        set {customtag::color::%player's uuid%} to raw "&7"
+    if event-slot is 1:
+        set {customtag::color::%player's uuid%} to raw "&1"
+    if event-slot is 2:
+        set {customtag::color::%player's uuid%} to raw "&c"
+    if event-slot is 3:
+        set {customtag::color::%player's uuid%} to raw "&a"
+    if event-slot is 4:
+        set {customtag::color::%player's uuid%} to raw "&5"
+    if event-slot is 5:
+        set {customtag::color::%player's uuid%} to raw "&b"
+    if event-slot is 6:
+        set {customtag::color::%player's uuid%} to raw "&d"
+    if event-slot is 7:
+        set {customtag::color::%player's uuid%} to raw "&4"
+    if event-slot is 8:
+        set {customtag::color::%player's uuid%} to raw "&0"
+    cancel event
+    close player's inventory
+    send "&aYou have selected your color!"
+    send "&aReselect custom tag in /tags to apply these changes!"
+on inventory close:
+    wait 5 ticks
+    if player's inventory contains a paper named "Rename me!":
+        remove a paper named "Rename me!" from player's inventory
